@@ -41,42 +41,15 @@ export function Main () {
         setItems([...itemsPage])
         console.log(counter)
     }
-    function sortHi (){
-        itemsPage = 
-        itemsPage.sort((a, b)=> {
-            return b.price-a.price
-        })
-        setItems([...itemsPage])
-        console.log([...itemsPage])
-    }
-    function sortLow (){
-        itemsPage = 
-        itemsPage.sort((a, b)=> {
-            return a.price-b.price
-        })
-        setItems([...itemsPage])
-        console.log([...itemsPage])
-    }
     
-    function sortLH(){
-        let a = itemsPage[1]
-        let b = itemsPage[2]
-        let c = a.price-b.price
-        console.log(a.price)
-        if(c>0){sortLow()}else{sortHi()}
-    }
-    
-
-
     return (
     
         <React.Fragment>
             <div>
-                <button className="c-button" onClick={sort}>сортировать low</button>
-                <button className="c-button" onClick={sortHi}>сортировать hi</button>
-                <button className="c-button" onClick={sortLH}>сортировать по цене</button>
+                <button className="c-button" onClick={sort}>сортировать по цене</button>
+                
+                
             </div>
-            
             
         {itemsPage.map(xProd => <Card key={xProd.id} item={xProd} addOnBasket={()=>add(xProd)} /> )}
         </React.Fragment>
