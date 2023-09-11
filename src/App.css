@@ -1,7 +1,4 @@
-/*.main {
-    width: 70%;
-    margin: 0 auto;
-}*/
+
 
 
 
@@ -12,7 +9,6 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  /* font-size: calc(5px + 10 * (100vw / 1280)); */
   font-size: clamp(0.7rem, 2vw, 1.2rem); 
 }
 
@@ -22,7 +18,6 @@
   justify-content: center;
 }
 
-/*.li_it {}*/
 
 .btn_top {
   text-decoration: none;
@@ -71,7 +66,6 @@
 
 .it_block_1 {
   display: grid;
-  /*grid-template-areas: "phone_ic tel_1 tel_str1" "phone_ic tel_2 tel_str2";*/
   grid-template-columns: 170px 170px;
   grid-template-rows: 30px 30px;
 
