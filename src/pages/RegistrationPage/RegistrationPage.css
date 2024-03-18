@@ -1,0 +1,45 @@
+.form_page_form_conteiner{
+    margin: 5vw;
+}
+.regError{
+    display: flex;
+    justify-content: center;
+    background-color: rgb(165, 42, 89);
+    color: aliceblue;
+    opacity: 0.9;
+    border-radius: 25px;
+    padding: 1.5vw;
+    margin: 2vw;
+    font-size:calc(14px + 2 * (100vw - 320px) / 880);
+}
+.regSuccess{
+    display: flex;
+    justify-content: center;
+    background-color: rgb(42, 165, 97);
+    color: aliceblue;
+    opacity: 0.9;
+    border-radius: 25px;
+    padding: 1.5vw;
+    margin: 2vw;
+    font-size:calc(14px + 2 * (100vw - 320px) / 880);
+}
+
+.auth{
+    background-color: rgb(41, 90, 146);
+    transition:all 500ms;
+    opacity: 0;
+    animation: show 3s 1;
+    animation-fill-mode: forwards;
+    animation-delay: 0.5s;
+
+}
+
+@keyframes show{
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+

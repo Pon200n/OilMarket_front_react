@@ -1,0 +1,26 @@
+.ABasket_head{
+    display: flex;
+    justify-content: center;
+}
+
+/* .content_wrapper{ */
+    /* min-height: calc(100vh - (271px + 208px) ); */
+    /* min-height: calc(100vh - 271px - 208px); */
+  /* } */
+
+  .order_button{
+    /* width: 100%; */
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .order_button:hover{
+    background-color: #45a049;
+    opacity:var(--hover-opacity);
+  
+  }

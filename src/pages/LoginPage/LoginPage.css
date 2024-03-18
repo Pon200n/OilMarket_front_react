@@ -1,0 +1,17 @@
+.loginError{
+    display: flex;
+    justify-content: center;
+    background-color: rgb(165, 42, 89);
+    color: aliceblue;
+    opacity: 0.9;
+    border-radius: 25px;
+    padding: 1.5vw;
+    margin: 2vw;
+    font-size:calc(14px + 2 * (100vw - 320px) / 880);
+    /* max-width: 0.5vw; */
+}
+.content_wrapper_login{
+    margin-top: 100px;
+    margin-left: 15vw;
+    margin-right: 15vw;
+}

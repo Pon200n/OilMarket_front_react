@@ -1,49 +1,101 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Context } from "../context";
+import { BurgerContext } from "../context";
+import { BrandContext } from "../context";
+import { CategoryContext } from "../context";
+import { UserContext } from "../userContext";
+import { BasketContext } from "../basketContext";
+import { HeaderMobilePanel } from "./HeaderMobilePanel/HeaderMobilePanel.js";
+import { BurgerMenuPanel } from "./BurgerMenuPanel/BurgerMenuPanel.js";
+import { HeaderSubBrandMenu } from "./HeaderSubBrandMenu/HeaderSubBrandMenu";
 
 export function Header() {
   const [context, setContext] = useContext(Context);
+  const [userContext, setUserContext] = useContext(UserContext);
+  const [basketContext, setBasketContext] = useContext(BasketContext);
+  const [burgerContext, setBurgerContext] = useContext(BurgerContext);
+  const [brandContext, setBrandContext] = useContext(BrandContext);
+  const [categoryContext, setCategoryContext] = useContext(CategoryContext);
+  const [hide, setHide] = useState("none");
 
+  useEffect(() => {
+    setBurgerContext(false);
+  }, []);
+
+  let totalBasketCount = basketContext.reduce(
+    (sum, item) => sum + item.product_count,
+    0
+  );
+  // useEffect(() => {
+  //   hidePhoneNumber();
+  // }, [basketContext, totalBasketCount]);
+  // console.log("bk", basketContext);
   let display;
-  if (context.length > 0) {
+  if (totalBasketCount > 0) {
     display = "inline";
   } else display = "none";
+  let adminDisplay;
+  if (userContext.role == "admin") {
+    adminDisplay = "flex";
+  } else adminDisplay = "none";
+  // * скрывать номер телефона
+
+  const [hidePhoneNumber, setHidePhoneNumber] = useState(false);
 
   return (
-    <div>
-      <div className="item1">
-        <div className="city">Новосибирск</div>
+    <div className="main_header">
+      <div className="reg_wrapper">
+        {/* <span className="headerBasketCount"> {totalBasketCount} </span> */}
+
+        <div className="reg">
+          {userContext.id ? (
+            <div className="regInterLeft">
+              <Link to="/personalAccount" className="btn_top">
+                {/* id={userContext.id}
+                role={userContext.role} */}
+                Личный кабинет
+              </Link>
+            </div>
+          ) : (
+            <></>
+          )}
+          <div className="regInter">
+            <div className="regInterBlock">
+              <div className="li_it">
+                <Link to="/login" className="btn_top">
+                  Войти
+                </Link>
+                <Link to="/registration" className="btn_top">
+                  Регистрация
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: adminDisplay }} className="item1">
+        <div className="city">
+          <Link to="/admin_panel" className="btn_top">
+            Админпанель
+          </Link>
+        </div>
         <ul className="ul_it1">
           <li className="li_it">
-            <a href="#" className="btn_top">
-              {" "}
-              Для юридических лиц
-            </a>
+            <Link to="/createProduct" className="btn_top">
+              Добавить товар
+            </Link>
           </li>
           <li className="li_it">
-            <a href="#" className="btn_top">
-              {" "}
-              Написать директору
-            </a>
+            <Link to="/add_category" className="btn_top">
+              Добавить категорию
+            </Link>
           </li>
           <li className="li_it">
-            <a href="#" className="btn_top">
-              {" "}
-              Франшиза
-            </a>
-          </li>
-          <li className="li_it">
-            <a href="#" className="btn_top">
-              {" "}
-              Вакансии
-            </a>
-          </li>
-          <li className="li_it">
-            <a href="#" className="btn_top">
-              {" "}
-              СТО
-            </a>
+            <Link to="/add_brand" className="btn_top">
+              Добавить бренд
+            </Link>
           </li>
         </ul>
       </div>
@@ -51,6 +103,7 @@ export function Header() {
       <div className="item2">
         <div className="phone_block">
           <img
+            onClick={() => setHidePhoneNumber(!hidePhoneNumber)}
             src="icon\png-clipart-iphone-telephone-logo-smartphone-iphone-electronics-text.png"
             className="phone_ic"
             width="40px"
@@ -58,14 +111,17 @@ export function Header() {
             alt=""
           />
 
-          <div className="it_block_1">
-            <div className="tel_1">8 800-600-01-01</div>
-            <div className="tel_str1">ИНТЕРНЕТ-МАГАЗИН</div>
-            <div className="tel_2">+7 (3843) 34-80-30</div>
-            <a href="#" className="tel_str2">
-              ЗАКАЗАТЬ ЗВОНОК
-            </a>
-          </div>
+          {/* <div className="it_block_1" style={{ display: hide }}> */}
+          {hidePhoneNumber && (
+            <div className="it_block_1">
+              <div className="tel_1">8 800-600-01-01</div>
+              <div className="tel_str1">ИНТЕРНЕТ-МАГАЗИН</div>
+              <div className="tel_2">+7 (3843) 34-80-30</div>
+              <a href="#" className="tel_str2">
+                ЗАКАЗАТЬ ЗВОНОК
+              </a>
+            </div>
+          )}
         </div>
 
         <div className="social">
@@ -82,29 +138,30 @@ export function Header() {
           >
             VK
           </a>
-          <Link to="/form" className="btn_1">
+          {/* <Link to="/form" className="btn_1">
             Forma
-          </Link>
+          </Link> */}
         </div>
 
         <Link to="/">
           <div className="main_logo">
-            <div className="logo_left">НМ</div>
-            <div className="logo_right">НАШИ МАСЛА</div>
+            <div className="logo_left">CQ</div>
+            <div className="logo_right">CAT OIL</div>
           </div>
         </Link>
 
         <div className="block_btn_2">
           <div className="fav">
-            <a href="#" className="btn_2">
+            <Link to="/test" className="btn_2">
               <img
                 src="icon\free-icon-star-126482.png"
                 width="20px"
                 height="20px"
                 alt=""
               />
-              Избранное
-            </a>
+
+              <span className="icon_iside">Избранное</span>
+            </Link>
           </div>
           <div className="comp">
             <Link to="/compare" className="btn_2">
@@ -114,22 +171,21 @@ export function Header() {
                 height="20px"
                 alt=""
               />
-              Сравнение
+              <span className="icon_iside">Сравнение</span>
             </Link>
           </div>
           <div className="basket">
-            <Link to="/basket" className="btn_2">
+            <Link to="/account_basket" className="btn_2">
               <img
                 src="icon\free-icon-shopping-cart-481384.png"
                 width="20px"
                 height="20px"
                 alt=""
               />
-              Корзина{" "}
+              <span className="icon_iside">Корзина</span>
             </Link>
             <span className="headerBasketCount" style={{ display: display }}>
-              {" "}
-              {context.length}{" "}
+              {totalBasketCount}
             </span>
           </div>
         </div>
@@ -142,293 +198,35 @@ export function Header() {
           <span className="sp_cat">Каталог товаров</span>
           <img src="icon\arrow-down-black.png" alt="" className="cat_ic_2" />
           <ul className="sub_menu">
-            <li>
-              <Link to="/products/Масло моторное" className="sub_m_it">
-                МОТОРНЫЕ МАСЛА
-              </Link>
-              <div className="c-menu_motor_oil">
-                <div className="maker">Производители</div>
-                <div className="oil_makers">
-                  <ul className="s_sub_m_list">
-                    <li>
-                      <a href="" className="s_sub_m_it">
-                        Idemitsu
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it">
-                        G-Energy
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it">
-                        Gans-oil
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it">
-                        Motul
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it">
-                        Rowe
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div className="over_makers">
-                  <ul className="s_sub_m_list2">
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Idemitsu
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        G-Energy
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Gans-oil
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Motul
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Rowe
-                      </a>
-                    </li>
-                  </ul>
-                  <ul className="s_sub_m_list2">
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Idemitsu
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        G-Energy
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Gans-oil
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Motul
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Rowe
-                      </a>
-                    </li>
-                  </ul>
-                  <ul className="s_sub_m_list2">
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Idemitsu
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        G-Energy
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Gans-oil
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Motul
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Rowe
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </li>
+            {categoryContext &&
+              categoryContext.map((item) => (
+                <li key={item.id}>
+                  <Link
+                    to={`/category_page/${item?.id}/none`}
+                    className="sub_m_it"
+                    key={item.id}
+                  >
+                    {item?.category_name}
+                  </Link>
 
-            <li>
-              <Link to="/products/Масло трансмиссионное" className="sub_m_it">
-                ТРАНСМИССИОННЫЕ МАСЛА
-              </Link>
-              <div className="c-menu_motor_oil">
-                <div className="maker">Производители</div>
-                <div className="oil_makers">
-                  <ul className="s_sub_m_list">
-                    <li>
-                      <a href="" className="s_sub_m_it">
-                        Idemitsu
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it">
-                        G-Energy
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it">
-                        Gans-oil
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it">
-                        Motul
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it">
-                        Rowe
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div className="over_makers">
-                  <ul className="s_sub_m_list2">
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Idemitsu
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        G-Energy
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Gans-oil
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Motul
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Rowe
-                      </a>
-                    </li>
-                  </ul>
-                  <ul className="s_sub_m_list2">
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Idemitsu
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        G-Energy
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Gans-oil
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Motul
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Rowe
-                      </a>
-                    </li>
-                  </ul>
-                  <ul className="s_sub_m_list2">
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Idemitsu
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        G-Energy
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Gans-oil
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Motul
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="s_sub_m_it2">
-                        Rowe
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-
-            <li>
-              <Link to="/products/Жидкость ГУР" className="sub_m_it">
-                ТЕХ. ЖИДКОСТИ
-              </Link>
-            </li>
-            <li>
-              <a href="" className="sub_m_it">
-                МАСЛА НА РОЗЛИВ
-              </a>
-            </li>
-            <li>
-              <a href="" className="sub_m_it">
-                ФИЛЬТРЫ
-              </a>
-            </li>
-            <li>
-              <a href="" className="sub_m_it">
-                АВТОХИМИЯ
-              </a>
-            </li>
-            <li>
-              <a href="" className="sub_m_it">
-                АККУМУЛЯТОРЫ
-              </a>
-            </li>
-            <li>
-              <a href="" className="sub_m_it">
-                НАКЛЕЙКИ
-              </a>
-            </li>
-            <li>
-              <a href="" className="sub_m_it">
-                БРЕНД СУВЕНИРЫ
-              </a>
-            </li>
-            <li>
-              <a href="" className="sub_m_it">
-                ПРОЧЕЕ
-              </a>
-            </li>
+                  <div className="c-menu_motor_oil">
+                    <div className="maker">Производители </div>
+                    <div className="oil_makers">
+                      <div style={{ display: "flex", flexWrap: "wrap" }}>
+                        <HeaderSubBrandMenu
+                          key={item.id}
+                          categoryID={item?.id}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ))}
           </ul>
         </div>
 
         <div className="form">
-          <form action="">
+          <div>
             <input
               type="text"
               placeholder="Поиск по каталогу"
@@ -444,7 +242,7 @@ export function Header() {
                 alt=""
               />
             </button>
-          </form>
+          </div>
         </div>
 
         <ul className="nav_2">
@@ -464,12 +262,14 @@ export function Header() {
             </a>
           </li>
           <li>
-            <a href="" className="btn_bot">
+            <Link to="/bonus" className="btn_bot">
               Бонусная система
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
+      <HeaderMobilePanel />
+      <BurgerMenuPanel />
     </div>
   );
 }

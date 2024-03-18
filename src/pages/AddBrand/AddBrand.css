@@ -1,0 +1,22 @@
+.regErrorBr{
+    display: flex;
+    justify-content: center;
+    background-color: rgb(165, 42, 89);
+    color: aliceblue;
+    opacity: 0.9;
+    border-radius: 25px;
+    padding: 1.5vw;
+    margin: 2vw;
+    font-size:calc(14px + 2 * (100vw - 320px) / 880);
+}
+.regSuccessBr{
+    display: flex;
+    justify-content: center;
+    background-color: rgb(42, 165, 97);
+    color: aliceblue;
+    opacity: 0.9;
+    border-radius: 25px;
+    padding: 1.5vw;
+    margin: 2vw;
+    font-size:calc(14px + 2 * (100vw - 320px) / 880);
+}

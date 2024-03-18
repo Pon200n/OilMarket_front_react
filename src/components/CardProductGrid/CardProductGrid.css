@@ -1,0 +1,21 @@
+.cart_grid {
+    /* width: 90%;
+    max-width: 250px;
+    height: 100%; */
+    /* position: relative; */
+    margin: 10px;
+    /* float: left;    */
+    border: 1px solid #959595;
+
+    border-radius: 15px;
+    box-shadow: 2px 2px 5px 5px rgba(0,0,0,0.1);
+    /* min-height: 370px; */
+    position: relative;
+  }
+
+  .icon_cart_grid {
+    display: block;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+  }

@@ -6,7 +6,7 @@ import { CardFooter } from "../components/CardFooter";
 export function BasketPage() {
   const [context, setContext] = useContext(Context);
 
-  function deleteFromB(id, objProd) {
+  function deleteFromB(objProd) {
     context.splice(context.indexOf(objProd), 1);
     setContext([...context]);
   }
@@ -64,7 +64,7 @@ export function BasketPage() {
     <BasketCard
       key={p.id}
       p={p}
-      deleteFromBasket={() => deleteFromB(p.id, p)}
+      deleteFromBasket={() => deleteFromB(p.id)}
       incr={() => incr(p.id)}
       dicr={() => dicr(p.id)}
       chengeValue={chengeValue}
@@ -78,12 +78,12 @@ export function BasketPage() {
   }
 
   return (
-    <React.Fragment>
+    <div className="basket_wrapper">
       <div style={{ display: display, height: height }}>
         <h1>Сейчас ваша корзина товаров пуста :(</h1>
       </div>
       {basketItem}
       <CardFooter />
-    </React.Fragment>
+    </div>
   );
 }

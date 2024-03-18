@@ -1,16 +1,26 @@
 import { useContext } from "react";
-import { Context } from "../context";
+import { BasketContext } from "../basketContext";
 
 export function CardFooter() {
-  const [context, setContext] = useContext(Context);
-  let totalBasketCount = context.reduce((sum, item) => sum + item.count, 0);
-  let totalBasketPrice = context.reduce(
-    (sum, item) => sum + item.priceTotal,
+  const [basketContext, setBasketContext] = useContext(BasketContext);
+  let totalBasketCount = basketContext.reduce(
+    (sum, item) => sum + item.product_count,
     0
   );
-  console.log("context", context);
-
+  let totalBasketPrice = basketContext.reduce(
+    (sum, item) => sum + item.price * item.product_count,
+    0
+  );
   const priceForm = new Intl.NumberFormat();
+  // const [context, setContext] = useContext(Context);
+  // let totalBasketCount = context.reduce((sum, item) => sum + item.count, 0);
+  // let totalBasketPrice = context.reduce(
+  //   (sum, item) => sum + item.priceTotal,
+  //   0
+  // );
+  // console.log("context", context);
+
+  // const priceForm = new Intl.NumberFormat();
 
   let display;
   if (totalBasketCount > 0) {
@@ -19,6 +29,7 @@ export function CardFooter() {
     display = "none";
   }
   return (
+    // <div>
     <div style={{ display: display }}>
       <div className="cardFooter">
         <div className="cardFooter_totalCount">

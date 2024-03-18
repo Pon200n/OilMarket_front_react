@@ -1,0 +1,18 @@
+.valueBar{
+    margin: 7px;
+    padding: 7px;
+    background-color:#99738E;
+    border-radius: 15px;
+}
+.valueName{
+    margin: 0px 10px 0px 10px;
+    font-size: large;
+    font-weight: 500;
+}
+.setButtonValue{
+    margin: 0px 5px 0px 5px;
+}
+.delButtonValue{
+    margin: 0px 5px 0px 5px;
+
+}
