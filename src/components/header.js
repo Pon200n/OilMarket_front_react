@@ -9,8 +9,11 @@ import { BasketContext } from "../basketContext";
 import { HeaderMobilePanel } from "./HeaderMobilePanel/HeaderMobilePanel.js";
 import { BurgerMenuPanel } from "./BurgerMenuPanel/BurgerMenuPanel.js";
 import { HeaderSubBrandMenu } from "./HeaderSubBrandMenu/HeaderSubBrandMenu";
-
-export function Header() {
+import { mobxContext } from "../index";
+import { observer } from "mobx-react";
+export const Header = observer(() => {
+  const { user } = useContext(mobxContext);
+  const { product } = useContext(mobxContext);
   const [context, setContext] = useContext(Context);
   const [userContext, setUserContext] = useContext(UserContext);
   const [basketContext, setBasketContext] = useContext(BasketContext);
@@ -50,6 +53,17 @@ export function Header() {
 
         <div className="reg">
           {userContext.id ? (
+            <div className="regInterLeft">
+              <Link to="/personalAccount" className="btn_top">
+                {/* id={userContext.id}
+                role={userContext.role} */}
+                Личный кабинет
+              </Link>
+            </div>
+          ) : (
+            <></>
+          )}
+          {user.isAuth ? (
             <div className="regInterLeft">
               <Link to="/personalAccount" className="btn_top">
                 {/* id={userContext.id}
@@ -100,47 +114,106 @@ export function Header() {
         </ul>
       </div>
 
-      <div className="item2">
-        <div className="phone_block">
-          <img
-            onClick={() => setHidePhoneNumber(!hidePhoneNumber)}
-            src="icon\png-clipart-iphone-telephone-logo-smartphone-iphone-electronics-text.png"
-            className="phone_ic"
-            width="40px"
-            height="40px"
-            alt=""
-          />
-
-          {/* <div className="it_block_1" style={{ display: hide }}> */}
-          {hidePhoneNumber && (
-            <div className="it_block_1">
-              <div className="tel_1">8 800-600-01-01</div>
-              <div className="tel_str1">ИНТЕРНЕТ-МАГАЗИН</div>
-              <div className="tel_2">+7 (3843) 34-80-30</div>
-              <a href="#" className="tel_str2">
-                ЗАКАЗАТЬ ЗВОНОК
-              </a>
+      {user.role === "admin" && (
+        <>
+          <div style={{ display: adminDisplay }} className="item1">
+            <div className="city">
+              <Link to="/admin_panel" className="btn_top">
+                Админпанель
+              </Link>
             </div>
-          )}
-        </div>
+            <ul className="ul_it1">
+              <li className="li_it">
+                <Link to="/createProduct" className="btn_top">
+                  Добавить товар
+                </Link>
+              </li>
+              <li className="li_it">
+                <Link to="/add_category" className="btn_top">
+                  Добавить категорию
+                </Link>
+              </li>
+              <li className="li_it">
+                <Link to="/add_brand" className="btn_top">
+                  Добавить бренд
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div className="item1">
+            <div className="city">
+              <Link to="/admin_panel" className="btn_top">
+                Админпанель
+              </Link>
+            </div>
+            <ul className="ul_it1">
+              <li className="li_it">
+                <Link to="/createProduct" className="btn_top">
+                  Добавить товар
+                </Link>
+              </li>
+              <li className="li_it">
+                <Link to="/add_category" className="btn_top">
+                  Добавить категорию
+                </Link>
+              </li>
+              <li className="li_it">
+                <Link to="/add_brand" className="btn_top">
+                  Добавить бренд
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </>
+      )}
+      <div className="item2">
+        <div className="item2_social_block">
+          <div className="phone_block">
+            <img
+              onClick={() => setHidePhoneNumber(!hidePhoneNumber)}
+              src="icon\png-clipart-iphone-telephone-logo-smartphone-iphone-electronics-text.png"
+              className="phone_ic"
+              width="40px"
+              height="40px"
+              alt=""
+            />
 
-        <div className="social">
-          <a href="https://api.whatsapp.com" target="_blank" className="btn_1">
-            W{" "}
-          </a>
-          <a href="https://web.telegram.org" target="_blank" className="btn_1">
-            T{" "}
-          </a>
-          <a
-            href="https://vk.com/public216545506"
-            target="_blank"
-            className="btn_1"
-          >
-            VK
-          </a>
-          {/* <Link to="/form" className="btn_1">
-            Forma
-          </Link> */}
+            {/* <div className="it_block_1" style={{ display: hide }}> */}
+            {hidePhoneNumber && (
+              <div className="it_block_1">
+                <div className="tel_1">8 800-600-01-01</div>
+                <div className="tel_str1">ИНТЕРНЕТ-МАГАЗИН</div>
+                <div className="tel_2">+7 (3843) 34-80-30</div>
+                <a href="#" className="tel_str2">
+                  ЗАКАЗАТЬ ЗВОНОК
+                </a>
+              </div>
+            )}
+          </div>
+
+          <div className="social">
+            <a
+              href="https://api.whatsapp.com"
+              target="_blank"
+              className="btn_1"
+            >
+              W{" "}
+            </a>
+            <a
+              href="https://web.telegram.org"
+              target="_blank"
+              className="btn_1"
+            >
+              T{" "}
+            </a>
+            <a
+              href="https://vk.com/public216545506"
+              target="_blank"
+              className="btn_1"
+            >
+              VK
+            </a>
+          </div>
         </div>
 
         <Link to="/">
@@ -222,6 +295,30 @@ export function Header() {
                   </div>
                 </li>
               ))}
+            {product.categories &&
+              product.categories.map((item) => (
+                <li key={item.id}>
+                  <Link
+                    to={`/category_page/${item?.id}/none`}
+                    className="sub_m_it"
+                    key={item.id}
+                  >
+                    {item?.category_name}
+                  </Link>
+
+                  <div className="c-menu_motor_oil">
+                    <div className="maker">Производители </div>
+                    <div className="oil_makers">
+                      <div style={{ display: "flex", flexWrap: "wrap" }}>
+                        <HeaderSubBrandMenu
+                          key={item.id}
+                          categoryID={item?.id}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ))}
           </ul>
         </div>
 
@@ -272,4 +369,4 @@ export function Header() {
       <BurgerMenuPanel />
     </div>
   );
-}
+});

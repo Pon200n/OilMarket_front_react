@@ -5,8 +5,13 @@ import "./AddCategory.css";
 import { AllCharsValuesContext } from "../../context";
 import { AllCharsNamesContext } from "../../context";
 import { UserContext } from "../../userContext";
+import { observer } from "mobx-react";
+import { mobxContext } from "../..";
+import { addCategoryLara } from "../../http/productAPI";
 
-export function AddCategory() {
+export const AddCategory = observer(() => {
+  const { product } = useContext(mobxContext);
+
   const [category, setCategoryInput] = useState();
   const [req, setReq] = useState();
   const [badReq, setBadReq] = useState();
@@ -27,7 +32,6 @@ export function AddCategory() {
   //   fetch("http://oilmarket1/getAllChars/index.php")
   //     .then((response) => response.json())
   //     .then((response) => {
-  //       console.log("все характеристики ответ", response);
   //     });
   // }
 
@@ -42,11 +46,9 @@ export function AddCategory() {
     );
 
     let res = await response.json();
-    // console.log(res);
     let status = await res.status;
     let msg = await res.msg;
     let arr = await res?.array;
-    console.log(status, msg, arr);
     if (status === "ok") {
       setReq(msg);
       setBadReq(false);
@@ -56,6 +58,36 @@ export function AddCategory() {
       setReq(false);
     }
   }
+  // * новый запрос на получение категорий
+  let filterID = 1;
+  const [newCat, setNewCat] = useState();
+  if (newCat != undefined) {
+    let filtretedNewCat = newCat.filter((f) => {
+      return f.id === filterID;
+    });
+    let CHARS_OF_filtretedNewCat = filtretedNewCat[0].chars;
+  }
+
+  function newGetCategories() {
+    fetch("http://127.0.0.1:8000/categories")
+      .then((response) => response.json())
+      .then((response) => {
+        setNewCat(response.data);
+      });
+  }
+  // * новый запрос на добавление категории
+
+  async function newAddCat() {
+    await addCategoryLara(category).then((response) => {
+      product.setCategories(response.data.data);
+      setCategoryInput("");
+    });
+  }
+
+  useEffect(() => {
+    newGetCategories();
+  }, []);
+  // *********************************
   return (
     <>
       {/* <h3>{category}</h3> */}
@@ -81,7 +113,7 @@ export function AddCategory() {
           <br />
           {badReq && <div className="regErrorCat">{badReq}</div>}
           {req && <div className="regSuccessCat">{req}</div>}
-          <button
+          {/* <button
             type="submit"
             className="form_input_button"
             onClick={addCategoryToDB}
@@ -90,10 +122,20 @@ export function AddCategory() {
             // style={styleContainer}
           >
             Добавить
+          </button> */}
+          <button
+            type="submit"
+            className="form_input_button"
+            onClick={newAddCat}
+            disabled={disabled}
+            style={{ background: disColor }}
+            // style={styleContainer}
+          >
+            Добавить
           </button>
         </div>
       </div>
-      <h2 style={{ display: "flex", justifyContent: "center" }}>Категории</h2>
+      {/* <h2 style={{ display: "flex", justifyContent: "center" }}>Категории</h2>
 
       {categoryContext ? (
         categoryContext.map((item) => (
@@ -101,7 +143,16 @@ export function AddCategory() {
         ))
       ) : (
         <div>нет данных</div>
+      )} */}
+      <h2 style={{ display: "flex", justifyContent: "center" }}>Категории</h2>
+
+      {product.categories ? (
+        product.categories.map((item) => (
+          <CategBrndPlate key={item.id} item={item} />
+        ))
+      ) : (
+        <div>нет данных</div>
       )}
     </>
   );
-}
+});

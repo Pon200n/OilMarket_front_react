@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./App.css";
 import { Header } from "./components/header";
 import { Footer } from "./components/footer";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ProductCard } from "./pages/product_card";
-import { Main } from "./pages/main";
-// import { BasketPage } from "./pages/BasketPage";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import ProductCard from "./pages/product_card";
+import Main from "./pages/main";
 import { Context } from "./context";
 import { BurgerContext } from "./context";
 import { CategoryContext } from "./context";
@@ -19,15 +18,12 @@ import { Page_CategoryPageContext } from "./context";
 import { FiltrationValuesCategPageContext } from "./context";
 import { UserContext } from "./userContext";
 import { BasketContext } from "./basketContext";
-import { MotorOilPage } from "./pages/MotorOilPage";
 import { CategoryPage } from "./pages/CategoryPage/CategoryPage.js";
-import { OilPage } from "./pages/OilPage";
-import { Form } from "./pages/Form";
 import { ComparePage } from "./pages/ComparePage/ComparePage";
-import { CreateProductForm } from "./pages/CreateProductForm/CreateProductForm";
+import CreateProductForm from "./pages/CreateProductForm/CreateProductForm";
 import { RegistrationPage } from "./pages/RegistrationPage/RegistrationPage";
-import { LoginPage } from "./pages/LoginPage/LoginPage";
-import { BonusPage } from "./pages/BonusPage/BonusPage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import BonusPage from "./pages/BonusPage/BonusPage";
 import { TestPage } from "./pages/TestPage/TestPage";
 import { PersonalAccount } from "./pages/PersonalAccount/PersonalAccount";
 import { AccountBasket } from "./pages/AccountBasket/AccountBasket";
@@ -38,8 +34,26 @@ import { AdminPanel } from "./pages/AdminPanel/AdminPanel.js";
 import { OrderAdmin } from "./pages/OrderAdmin/OrderAdmin.js";
 import { StatusOrderRedact } from "./pages/StatusOrderRedact/StatusOrderRedact";
 import { OrdePageAdminRedact } from "./pages/OrdePageAdminRedact/OrdePageAdminRedact";
-import { CharsAndValuesOfCat } from "./pages/CharsAndValuesOfCat/CharsAndValuesOfCat";
-export default function App() {
+import CharsAndValuesOfCat from "./pages/CharsAndValuesOfCat/CharsAndValuesOfCat";
+import { createContext } from "react";
+import UserStore from "./MobxStore/UserStore";
+import { observer } from "mobx-react";
+import { mobxContext } from ".";
+import {
+  getBrandsLara,
+  getCategoriesLara,
+  getCharsLara,
+  getProducts,
+  getValuesLara,
+} from "./http/productAPI";
+import { setUserData } from "./http/userAPI";
+
+const App = observer(() => {
+  //* mobx test
+
+  const { user } = useContext(mobxContext);
+  const { product } = useContext(mobxContext);
+  // *
   const [context, setContext] = useState([]);
   const [userContext, setUserContext] = useState({});
   const [basketContext, setBasketContext] = useState([]);
@@ -64,6 +78,13 @@ export default function App() {
     getBrands();
     getStatuses();
     getAllCharsAndValues();
+    // ???
+    getCatsLara();
+    getBrandsLARA();
+    setUserDataLara();
+    getCatCharsLara();
+    getCharValuesLara();
+    // getProductsLara();
   }, []);
   // *
   async function GetTokenFromServ() {
@@ -169,8 +190,42 @@ export default function App() {
       });
   }
 
-  // if (userContext.role == "admin") {
-  //   getAllChars()
+  // *lara
+  async function getCatsLara() {
+    await getCategoriesLara().then((response) => {
+      product.setCategories(response.data.data);
+    });
+  }
+  async function getCatCharsLara() {
+    await getCharsLara().then((response) => {
+      product.setChars(response.data.data);
+    });
+  }
+  async function getCharValuesLara() {
+    await getValuesLara().then((response) => {
+      product.setValues(response.data.data);
+    });
+  }
+
+  async function getBrandsLARA() {
+    await getBrandsLara().then((response) => {
+      product.setBrands(response.data.data);
+    });
+  }
+
+  async function setUserDataLara() {
+    await setUserData().then((response) => {
+      user.setThisUser(response.data);
+      user.setThisRole(response.data.role);
+      user.setThisAuth(true);
+    });
+  }
+
+  // async function getProductsLara() {
+  //   await getProducts().then((response) => {
+  //     console.log("productsLARA", response?.data?.data);
+  //     product.setProducts(response?.data?.data);
+  //   });
   // }
   return (
     <Context.Provider value={[context, setContext]}>
@@ -217,54 +272,21 @@ export default function App() {
                             >
                               <BrowserRouter>
                                 <Header></Header>
-                                {/* <button onClick={getCategories}>cat</button>
-                    <button onClick={getBrands}>brnds</button>
-                    <button onClick={getStatuses}>stss</button> */}
-                                {/* {categoryContext ? (
-                    categoryContext.map((x) => (
-                      <div key={x.id}>{x.category_name}</div>
-                    ))
-                  ) : (
-                    <div>нет данных</div>
-                  )}
-                  {brandContext ? (
-                    brandContext.map((x) => (
-                      <div key={x.id}>{x.brand_name}</div>
-                    ))
-                  ) : (
-                    <div>нет данных</div>
-                  )} */}
+
                                 <Routes>
                                   <Route path="/" element={<Main />}></Route>
 
                                   <Route
-                                    path="/form"
-                                    element={<Form />}
-                                  ></Route>
-                                  <Route
                                     path="/product/:id"
                                     element={<ProductCard />}
                                   ></Route>
-                                  {/* <Route path="/basket" element={<BasketPage />}></Route> */}
                                   <Route
                                     path="/compare"
                                     element={<ComparePage />}
                                   ></Route>
                                   <Route
-                                    path="/motor_oil"
-                                    element={<MotorOilPage />}
-                                  ></Route>
-                                  <Route
                                     path="/category_page/:category/:brand"
                                     element={<CategoryPage />}
-                                  ></Route>
-                                  <Route
-                                    path="/transmiss_oil"
-                                    element={<OilPage />}
-                                  ></Route>
-                                  <Route
-                                    path="/products/:category"
-                                    element={<OilPage />}
                                   ></Route>
                                   <Route
                                     path="/bonus"
@@ -278,14 +300,7 @@ export default function App() {
                                     path="/login"
                                     element={<LoginPage />}
                                   ></Route>
-                                  <Route
-                                    path="/add_brand"
-                                    element={<AddBrand />}
-                                  ></Route>
-                                  <Route
-                                    path="/add_category"
-                                    element={<AddCategory />}
-                                  ></Route>
+
                                   <Route
                                     path="/account_basket"
                                     element={<AccountBasket />}
@@ -294,10 +309,7 @@ export default function App() {
                                     path="/personalAccount"
                                     element={<PersonalAccount />}
                                   ></Route>
-                                  <Route
-                                    path="/createProduct"
-                                    element={<CreateProductForm />}
-                                  ></Route>
+
                                   <Route
                                     path="/test"
                                     element={<TestPage />}
@@ -306,26 +318,52 @@ export default function App() {
                                     path="/order_user"
                                     element={<OrderUserPage />}
                                   ></Route>
+                                  {user.user.role === "admin" ? (
+                                    <>
+                                      <Route
+                                        path="/admin_panel"
+                                        element={<AdminPanel />}
+                                      ></Route>
+                                      <Route
+                                        path="/createProduct"
+                                        element={<CreateProductForm />}
+                                      ></Route>
+                                      <Route
+                                        path="/add_brand"
+                                        element={<AddBrand />}
+                                      ></Route>
+                                      <Route
+                                        path="/add_category"
+                                        element={<AddCategory />}
+                                      ></Route>
+                                      <Route
+                                        path="/order_admin"
+                                        element={<OrderAdmin />}
+                                      ></Route>
+                                      <Route
+                                        path="/status_order_redact"
+                                        element={<StatusOrderRedact />}
+                                      ></Route>
+                                      <Route
+                                        path="/order_page_admin_redact/:id"
+                                        element={<OrdePageAdminRedact />}
+                                      ></Route>
+                                      <Route
+                                        path="/chars_values_of_cat/:id"
+                                        element={<CharsAndValuesOfCat />}
+                                      ></Route>
+                                    </>
+                                  ) : (
+                                    <Route path="/" element={<Main />}></Route>
+                                  )}
+
                                   <Route
-                                    path="/admin_panel"
-                                    element={<AdminPanel />}
-                                  ></Route>
-                                  <Route
-                                    path="/order_admin"
-                                    element={<OrderAdmin />}
-                                  ></Route>
-                                  <Route
-                                    path="/status_order_redact"
-                                    element={<StatusOrderRedact />}
-                                  ></Route>
-                                  <Route
-                                    path="/order_page_admin_redact/:id"
-                                    element={<OrdePageAdminRedact />}
-                                  ></Route>
-                                  <Route
-                                    path="/chars_values_of_cat/:id"
-                                    element={<CharsAndValuesOfCat />}
-                                  ></Route>
+                                    path="*"
+                                    element={<Navigate to="/" replace />}
+                                  />
+                                  {/* </BackButton> */}
+
+                                  {/* <Navigate to={"/"} replace /> */}
                                 </Routes>
                                 {/* <Footer></Footer> */}
                               </BrowserRouter>
@@ -343,4 +381,5 @@ export default function App() {
       </UserContext.Provider>
     </Context.Provider>
   );
-}
+});
+export default App;

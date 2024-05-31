@@ -36,6 +36,7 @@ export function HeaderSubBrandMenu(props) {
       {firstBrands &&
         firstBrands.map((brnd) => (
           <Link
+            // onClick={() => console.log("header brandID", brnd?.manufact)}
             className="s_sub_m_it2"
             key={brnd.manufact}
             to={`/category_page/${props?.categoryID}/${brnd?.manufact}`}

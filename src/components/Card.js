@@ -45,23 +45,15 @@ export function Card(props) {
 
   return (
     <div className="cart_mobile_540px">
-      {/* <div className="cart_min-height"> */}
-      {/* <div style={{ minHeight: "350px" }} className="cart"> */}
       <div className="cart">
         <div className="cart_img">
           <Link to={`/product/${props.item.id}`}>
             {" "}
             <img
               className="main_card_img"
-              // style={{
-              //   maxHeight: "150px",
-              //   maxWidth: "150px",
-              //   borderRadius: "15px",
-              // }}
               src={"http://oilmarket1/static/" + props.item.img}
               alt=""
             />
-            {/* <img src={src={"http://oilmarket1/static/oil1.jpg" props.item.img} alt="" /> */}
           </Link>
         </div>
         <div className="icon_cart">
@@ -86,15 +78,13 @@ export function Card(props) {
         </div>
         <div className="discr">
           <div className="oil_category">
-            {/* {props?.item?.category} */}
-            {props?.item?.category_name}
+            {props?.item?.category?.category_name}
           </div>
           <div className="name_char">
             <Link to={`/product/${props.item.id}`} className="name_char_href">
               {" "}
-              {/* {props?.item?.manufact} */}
-              {props?.item?.brand_name} {props.item.name} {props.item.SAE},{" "}
-              {props.item.volume}
+              {props?.item?.brand?.brand_name} {props.item.name}{" "}
+              {props.item.SAE} {props.item.volume}
             </Link>
           </div>
           <div className="price">{priceForm.format(props.item.price)} ₽</div>

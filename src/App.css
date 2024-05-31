@@ -3,6 +3,7 @@
   justify-content: center;
   clear: both;
   margin: 10px;
+  /* width: 70vw; */
 }
 
 .pag_but_Pm{
@@ -196,6 +197,12 @@
   font-weight: bold;
   color: #0e5070;
 }
+.item2_social_block{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-basis: calc(100% / 3);
+}
 
 .social {
   display: flex;
@@ -297,6 +304,7 @@
 .block_btn_2 {
   display: flex;
   align-items: center;
+  flex-basis: calc(100%/3);
 }
 
 .btn_2 {

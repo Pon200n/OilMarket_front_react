@@ -22,12 +22,7 @@ export function ValueSelectBar(props) {
     });
   }
 
-  // console.log("farr", farr);
-  // console.log("notSortValues", notSortValues);
-  // console.log("charsValuesContext", charsValuesContext);
   function to(e) {
-    // console.log(e);
-    // console.log("farr.lenght", farr.length);
     if (farr.length === 0) {
       setCharsValuesContext([
         ...charsValuesContext,
@@ -37,8 +32,7 @@ export function ValueSelectBar(props) {
       let rr = charsValuesContext.filter(function (x) {
         return +x.char_id != char_id;
       });
-      // console.log(charsValuesContext);
-      // console.log("rr", rr);
+
       setCharsValuesContext([
         ...rr,
         { value: `${+e.target.value}`, char_id: `${+char_id}` },
@@ -66,7 +60,7 @@ export function ValueSelectBar(props) {
   let f;
   function checkChange(ev) {
     f = charsValuesContext.find((item) => item.value == ev.target.value);
-    console.log("f", f);
+    // console.log("f", f);
     if (!f) {
       setCharsValuesContext([
         ...charsValuesContext,
@@ -74,13 +68,13 @@ export function ValueSelectBar(props) {
       ]);
     } else {
       let del = charsValuesContext.filter((item) => item != f);
-      console.log("del", del);
+      // console.log("del", del);
       setCharsValuesContext(del);
     }
 
-    console.log("v.targed.value", ev.target.value);
+    // console.log("v.targed.value", ev.target.value);
   }
-  console.log("сharsValuesContext", charsValuesContext);
+  // console.log("сharsValuesContext", charsValuesContext);
 
   return (
     <>

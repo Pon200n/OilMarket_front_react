@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Table } from "../components/charTable";
+import { Table } from "../components/CharTable/CharTable";
 
 // import { items } from "../components/products";
 
@@ -8,15 +8,18 @@ import { useContext, useState, useEffect } from "react";
 import { Context } from "../context";
 import { UserContext } from "../userContext";
 import { BasketContext } from "../basketContext";
+import { deleteProduct, getProduct } from "../http/productAPI";
+import { mobxContext } from "..";
+import { observer } from "mobx-react";
 
-export function ProductCard() {
+export const ProductCard = observer(() => {
+  const { product } = useContext(mobxContext);
+  const { user } = useContext(mobxContext);
   useEffect(() => {
-    getProductByIDFromServ();
+    // getProductByIDFromServ();
   }, []);
   const router = useParams();
   const rout = router.id;
-  // console.log(router);
-  // console.log(rout);
   const [req, setReq] = useState();
   const [userContext, setUserContext] = useContext(UserContext);
   const [basketContext, setBasketContext] = useContext(BasketContext);
@@ -25,34 +28,34 @@ export function ProductCard() {
   const [productChars, setProductChars] = useState([]);
 
   let userDataFromLocalStorage = localStorage.getItem("token");
-  // console.log(userDataFromLocalStorage);
   // setUserContext({ userDataFromLocalStorage });
 
-  //* Скрыть кнопку {удалить}
-  let adminDisplay;
-  if (userContext.role == "admin") {
-    adminDisplay = "flex";
-  } else adminDisplay = "none";
+  // //* Скрыть кнопку {удалить}
+  // let adminDisplay;
+  // if (userContext.role == "admin") {
+  //   adminDisplay = "flex";
+  // } else adminDisplay = "none";
 
   //* удалить product из базы
-  function deleteFromBase() {
-    fetch("http://oilmarket1/del/?id=" + rout, {
-      method: "GET", //POST
-      header: {
-        "Content-Type": "applicaton/x-www-form-urlencoded",
-      },
-      // body: JSON.stringify(rout),
-    })
-      .then((response) => response.text())
-      .then((response) => {
-        JSON.parse(response);
-        // console.log(response);
-      });
-  }
+  // function deleteFromBase() {
+  //   fetch("http://oilmarket1/del/?id=" + rout, {
+  //     method: "GET", //POST
+  //     header: {
+  //       "Content-Type": "applicaton/x-www-form-urlencoded",
+  //     },
+  //     // body: JSON.stringify(rout),
+  //   })
+  //     .then((response) => response.text())
+  //     .then((response) => {
+  //       JSON.parse(response);
+  //     });
+  // }
   function del() {
     const qvest = window.confirm("Хотите удалить карточку товара?");
     if (qvest) {
-      deleteFromBase();
+      // deleteFromBase();
+      deleteProductLara();
+      alert("Товар " + items.name + " удален.");
     }
   }
 
@@ -81,7 +84,6 @@ export function ProductCard() {
   //           return value;
   //         })
   //       );
-  //       // console.log(response);
   //     });
   // }
   function getProductByIDFromServ() {
@@ -96,13 +98,10 @@ export function ProductCard() {
         // let product = response.product
         setItems(response.product);
         setProductChars(response.chars);
-        console.log(response);
       });
   }
   let [items, setItems] = useState();
-  // console.log(items);
   const priceForm = new Intl.NumberFormat();
-  // console.log(userContext.id);
   //*Добавить product в корзину на сервер
   function addToBasketProduct() {
     fetch(
@@ -121,14 +120,12 @@ export function ProductCard() {
       .then((response) => response.text())
       .then((response) => {
         setReq(JSON.parse(response));
-        console.log("req", JSON.parse(response));
         setBasketContext(JSON.parse(response));
       });
     alert("товар добавлен в корзину");
   }
   // if (items) {
   //   let item = items.find((item) => item.id == router.id);
-  //   console.log(item);
   // }
 
   // const [context, setContext] = useContext(Context);
@@ -141,15 +138,30 @@ export function ProductCard() {
   //     setContext([...context]);
   //   }
   // }
+  // *** LARA 26.05.2024
+  async function getProductLara() {
+    await getProduct(rout).then((response) => {
+      setItems(response.data);
+    });
+  }
 
+  async function deleteProductLara() {
+    await deleteProduct(rout).then((response) => {
+      product.setProducts(response.data);
+    });
+  }
+
+  useEffect(() => {
+    getProductLara();
+  }, []);
   return (
     <>
       <div className="card_center">
         {items ? (
           <div className="cart_single">
             <div className="name_char_single">
-              {items?.category_name} {items?.brand_name} {items?.name}{" "}
-              {items?.SAE}, {items?.volume}
+              {items?.category?.category_name} {items?.brand?.brand_name}{" "}
+              {items?.name} {items?.SAE} {items?.volume}
             </div>
             <div className="cart_img_single">
               <img
@@ -190,9 +202,15 @@ export function ProductCard() {
                   </button> */}
                   </div>
                   <div className="bay_card">
-                    <button onClick={del} style={{ display: adminDisplay }}>
-                      Удалить товар
-                    </button>
+                    {user.role === "admin" && (
+                      <button
+                        onClick={del}
+                        // style={{ display: adminDisplay }}
+                      >
+                        Удалить товар
+                      </button>
+                    )}
+
                     <br />
                     <button
                       className="bay_oneclick_card"
@@ -216,16 +234,18 @@ export function ProductCard() {
                   className="discrButton"
                   onClick={() => setCharTableToggle(!charTableToggle)}
                 >
-                  Характеристики
+                  {charTableToggle ? "Скрыть " : "Показать "}характеристики
                 </li>
               </ul>
             </div>
             {discrToggle && (
               <div className="discr_text">
-                <p className="tt">{items?.discr}</p>
+                <p className="tt">{items?.info?.description}</p>
               </div>
             )}
-            {charTableToggle && <Table chars={productChars} />}
+            {charTableToggle && (
+              <Table chars={productChars} charsLara={items.values} />
+            )}
           </div>
         ) : (
           <h1>none</h1>
@@ -233,4 +253,5 @@ export function ProductCard() {
       </div>
     </>
   );
-}
+});
+export default ProductCard;

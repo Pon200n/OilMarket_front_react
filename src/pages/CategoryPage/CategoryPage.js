@@ -10,7 +10,13 @@ import { FiltrationValuesCategPageContext } from "../../context";
 import { useContext } from "react";
 import { FilterBarCategoryPage } from "../../components/FilterBarCategoryPage/FilterBarCategoryPage.js";
 import "./CategoryPage.css";
-export function CategoryPage() {
+import { observer } from "mobx-react";
+import { mobxContext } from "../..";
+
+export const CategoryPage = observer(() => {
+  const { product } = useContext(mobxContext);
+
+  // export function CategoryPage() {
   const [page_CategoryPageContext, setPage_CategoryPageContext] = useContext(
     Page_CategoryPageContext
   );
@@ -72,9 +78,10 @@ export function CategoryPage() {
   const [active, setActive] = useState(1);
   const [limit, setLimit] = useState(20);
   const [countProd, setCountProd] = useState();
-  const [sortByPrice, setSortByPrice] = useState();
+  const [sortByPrice, setSortByPrice] = useState("ASC");
   const [hideFilterBar, setHideFilterBar] = useState(true);
   const [hideFilterBarMobile, setHideFilterBarMobile] = useState(false);
+  const [perPage, setPerPage] = useState(15);
 
   function getCategoryProducts() {
     fetch(
@@ -117,6 +124,34 @@ export function CategoryPage() {
         setCountProd(countProd);
       });
   }
+  console.log(
+    "filtrationValuesCategPageContext",
+    filtrationValuesCategPageContext
+  );
+
+  function getProdsCatPageResourse() {
+    fetch(
+      "http://127.0.0.1:8000/getProdsCatPageResourse/?category=" +
+        routCat +
+        "&manufact=" +
+        routBrnd +
+        // "&page=" +
+        // page_CategoryPageContext +
+        // "&limit=" +
+        // limit +
+        // "&ArrValues=" +
+        // filtrationValuesCategPageContext +
+        "&sortByPrice=" +
+        sortByPrice +
+        "&perPage=" +
+        perPage
+    )
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+      });
+  }
+  console.log(routBrnd);
   useEffect(() => {
     setFiltrationValuesCategPageContext([]);
   }, [
@@ -126,6 +161,7 @@ export function CategoryPage() {
 
   useEffect(() => {
     getCategoryProducts();
+    getProdsCatPageResourse();
   }, [
     // routCat,
     routBrnd,
@@ -133,6 +169,7 @@ export function CategoryPage() {
     limit,
     filtrationValuesCategPageContext,
     sortByPrice,
+    perPage,
   ]);
 
   let pageCount;
@@ -336,10 +373,27 @@ export function CategoryPage() {
                 </button>
               ))}
             {/* <button onClick={() => setLimit(countProd)}>все</button> */}
+            <label>
+              На странице:
+              <select
+                value={perPage}
+                onChange={(e) => setPerPage(e.target.value)}
+              >
+                {/* <option selected value={perPage}>
+              {perPage}
+            </option> */}
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="35">35</option>
+              </select>
+            </label>
           </div>
         </div>
       </section>
       {/* </div> */}
     </>
   );
-}
+});
+// export default CategoryPage;

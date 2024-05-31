@@ -1,16 +1,42 @@
+// import { mobxContext } from "../../App";
+import { mobxContext } from "../../index";
+import { useContext } from "react";
+import { observer } from "mobx-react";
 import "./BonusPage.css";
+// export function BonusPage() {
+//   const { user } = useContext(mobxContext);
+//   console.log("user mobx", user);
+//   return (
+//     <>
+//       <h1>BonusPage</h1>
+//       {user.testUser}
+//       {user && <span>{user.isAuth}</span>}
+//       <button
+//         onClick={() => {
+//           user.setTestUser("qcqcqc ");
+//         }}
+//       >
+//         new name
+//       </button>
+//     </>
+//   );
+// }
 
-export function BonusPage() {
+const BonusPage = observer(() => {
+  const { user } = useContext(mobxContext);
+  console.log("user mobx", user);
   return (
     <>
-      <div class="b">
-        <div class="container">
-          <div class="box-1"> A </div>
-          <div class="box-2"> B </div>
-          <div class="box-3"> C </div>
-          <div class="box-4"> D </div>
-        </div>
-      </div>
+      <h1>BonusPage</h1>
+      <button
+        onClick={() => {
+          user.setTestUser("BonusPage ");
+        }}
+      >
+        new name
+      </button>
+      {user.testUser}
     </>
   );
-}
+});
+export default BonusPage;

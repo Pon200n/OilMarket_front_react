@@ -1,70 +1,99 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./RegistrationPage.css";
 export function RegistrationPage() {
-  const [req, setReq] = useState();
-  const [badReq, setBadReq] = useState();
+  // const [req, setReq] = useState();
+  // const [badReq, setBadReq] = useState();
 
-  // const [id, setID] = useState(1);
-  const [nikName, setNikname] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [patronymic, setPatronymic] = useState("");
-  const [phone, setPhone] = useState("");
-  const [eMail, seteMail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  // const [nikName, setNikname] = useState("");
+  // const [lastName, setLastName] = useState("");
+  // const [firstName, setFirstName] = useState("");
+  // const [patronymic, setPatronymic] = useState("");
+  // const [phone, setPhone] = useState("");
+  // const [eMail, seteMail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const navigate = useNavigate();
 
-  function clickHandler() {
-    fetch("http://oilmarket1/addUser/index.php", {
+  // function clickHandler() {
+  //   fetch("http://oilmarket1/addUser/index.php", {
+  //     method: "POST",
+  //     header: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       nikName,
+  //       lastName,
+  //       firstName,
+  //       patronymic,
+  //       phone,
+  //       eMail,
+  //       password,
+  //     }),
+  //   })
+  //     .then((response) => response.text())
+  //     .then((response) => {
+  //       const result = JSON.parse(response);
+  //       const status = result.status;
+
+  //       if (status === "ok") {
+  //         const msg = result.msg;
+  //         setReq(msg);
+  //         setBadReq(false);
+  //         // alert(msg);
+  //         // navigate("/login");
+  //       } else if (status === "error") {
+  //         const msg = result.msg;
+  //         setBadReq(msg);
+  //         setReq(false);
+  //       }
+
+  // console.log(JSON.parse(response));
+  // });
+  // }
+  // ! registarion for LARAVEL API
+  let nameRef = useRef();
+  let second_name = useRef();
+  let patronymic = useRef();
+  let phone = useRef();
+  let email = useRef();
+  let password = useRef();
+  let password_confirmation = useRef();
+
+  function registration() {
+    fetch("http://127.0.0.1:8000/api/register", {
       method: "POST",
-      header: {
+      headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+        // "X-CSRF-TOKEN":
+        // "eyJpdiI6Ik05ZnBMVWgrSnpmZ2xNcGh3SHBqWFE9PSIsInZhbHVlIjoiY0tJNXBTV0ZEa3ZnOXpoeVVHanZqdk0rSldyQlVkTkZTdHBZdTNWd210SkQ4eG9zQk94ODJldy9MS2R1ZEd3T0tqK1l0THhPQ0VwNHRzYjlqVHAvRmFnMk5WZTB5cEFBVzBUbEpDd0c1Y1BhK0J5K3hUT2FYZlN1N0ZhYkxmVCsiLCJtYWMiOiIxMjIxOTM5YzNiNWJjM2M1ZWEzZWI1NDQwMWE2OGRjYzNmZjE2ZWFmYWNkNmRhZjllNDcxYjk2ZDU5MjY3YmFkIiwidGFnIjoiIn0=",
+        // "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vb2lsbWFya2V0MS9waHAtand0LyIsImF1ZCI6Imh0dHA6Ly9vaWxtYXJrZXQxL3BocC1qd3QvIiwiaWF0IjoxNzAzMzA4MDc1LCJleHAiOjE3MDMzMTE2NzUsImRhdGEiOnsiaWQiOiIxMyIsInJvbGUiOiJ1c2VyIiwibmlrIjoicGV0ZTIifX0.EgT3npphbOxLcyrF98SCFEaOJpsJrdos6Dr4ZKATuqE",
+        // "eyJ0eXAiOiJKsdfgsdfsdfdsffffgzI1NiJ9.eyJpc3MiOiJodfsfsdfsfsfsdfIsImF1ZCI6Imh0dHA6Ly9vaWxtYXJrZXQxL3BocC1qd3QvIiwiaWF0IjoxNzAzMzA4MDc1LCJleHAiOjE3MDMzMTE2NzUsImRhdGEiOnsiaWQiOiIxMyIsInJvbGUiOiJ1c2VyIiwibmlrIjoicGV0ZTIifX0.sdfsgsdfgsdftbttsdfgsdfg434Jrdos6Dr4ZKATuqE",
       },
       body: JSON.stringify({
-        nikName,
-        lastName,
-        firstName,
-        patronymic,
-        phone,
-        eMail,
-        password,
+        name: nameRef.current.value,
+        second_name: second_name.current.value,
+        patronymic: patronymic.current.value,
+        phone: phone.current.value,
+        email: email.current.value,
+        password: password.current.value,
+        password_confirmation: password_confirmation.current.value,
       }),
     })
       .then((response) => response.text())
       .then((response) => {
-        const result = JSON.parse(response);
-        const status = result.status;
-
-        if (status === "ok") {
-          const msg = result.msg;
-          setReq(msg);
-          setBadReq(false);
-          // alert(msg);
-          // navigate("/login");
-        } else if (status === "error") {
-          const msg = result.msg;
-          setBadReq(msg);
-          setReq(false);
-        }
-
-        // console.log(JSON.parse(response));
+        console.log(response);
       });
   }
-
+  // function registration() {
+  //   fetch("http://127.0.0.1:8000")
+  //     .then((response) => response.text())
+  //     .then((response) => console.log(response));
+  // }
   return (
     <>
-      {/* <h6>{req}</h6>
-      <h6>ник:{nikName}</h6>
-      <h6>Фамилия:{lastName}</h6>
-      <h6>Имя:{firstName}</h6>
-      <h6>Отчество:{patronymic}</h6>
-      <h6>Номер телефона:{phone}</h6>
-      <h6>Электронная почта:{eMail}</h6>
-      <h6>Пароль:{password}</h6> */}
-
       <div className="form_page_form_conteiner">
-        <div>
+        {/* <div>
           <label>
             Login:
             <input
@@ -174,6 +203,113 @@ export function RegistrationPage() {
           {/* <button type="submit" onClick={() => setReq(!req)}>
             Авторизоваться
           </button> */}
+        {/* </div>  */}
+      </div>
+      //! LARAVEL form //! LARAVEL form //! LARAVEL form
+      <hr />
+      <div className="form_page_form_conteiner">
+        <div>
+          <label>
+            Имя:
+            <input
+              id="name"
+              name="name"
+              className="input_form"
+              type="text"
+              ref={nameRef}
+              // value={name}
+              // onChange={(event) => setNikname(event.target.value)}
+            />
+          </label>
+          {/* {badReq && <div className="regError">{badReq}</div>} */}
+          <br />
+          <label>
+            Фамилия:
+            <input
+              id="second_name"
+              name="second_name"
+              className="input_form"
+              type="text"
+              ref={second_name}
+              // value={name}
+              // onChange={(event) => setNikname(event.target.value)}
+            />
+          </label>
+          {/* {badReq && <div className="regError">{badReq}</div>} */}
+          <br />
+          <label>
+            Отчество:
+            <input
+              id="patronymic"
+              name="patronymic"
+              className="input_form"
+              type="text"
+              ref={patronymic}
+              // value={name}
+              // onChange={(event) => setNikname(event.target.value)}
+            />
+          </label>
+          {/* {badReq && <div className="regError">{badReq}</div>} */}
+          <br />
+          <label>
+            Телефон:
+            <input
+              id="phone"
+              name="phone"
+              className="input_form"
+              type="text"
+              ref={phone}
+              // value={name}
+              // onChange={(event) => setNikname(event.target.value)}
+            />
+          </label>
+          {/* {badReq && <div className="regError">{badReq}</div>} */}
+          <br />
+          <label>
+            Электронная почта:
+            <input
+              id="email"
+              name="email"
+              className="input_form"
+              type="email"
+              ref={email}
+              // value={name}
+              // onChange={(event) => setNikname(event.target.value)}
+            />
+          </label>
+          {/* {badReq && <div className="regError">{badReq}</div>} */}
+          <br />
+          <label>
+            Пароль:
+            <input
+              id="password"
+              name="password"
+              className="input_form"
+              type="password"
+              ref={password}
+              // value={name}
+              // onChange={(event) => setNikname(event.target.value)}
+            />
+          </label>
+          {/* {badReq && <div className="regError">{badReq}</div>} */}
+          <br />
+          <label>
+            Подтвердите пароль:
+            <input
+              id="password"
+              name="password"
+              className="input_form"
+              type="password"
+              ref={password_confirmation}
+              // value={name}
+              // onChange={(event) => setNikname(event.target.value)}
+            />
+          </label>
+          {/* {badReq && <div className="regError">{badReq}</div>} */}
+          <br />
+          <button onClick={registration} className="form_input_button auth">
+            Отправить
+          </button>
         </div>
       </div>
     </>

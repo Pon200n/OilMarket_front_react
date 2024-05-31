@@ -4,6 +4,7 @@ import { Table } from "../components/charTable";
 import { DiscriptionOil } from "../components/product_disription";
 import { useContext, useState, useEffect } from "react";
 import { Context } from "../context";
+import { deleteProduct } from "../http/productAPI";
 
 export function CardPage() {
   useEffect(() => {
@@ -82,7 +83,10 @@ export function CardPage() {
   //     setContext([...context]);
   //   }
   // }
-
+  // *** laravel
+  function deleteProductLara(router) {
+    deleteProduct(router).then((response) => console.log(response));
+  }
   return (
     <div>
       {items ? <h1>{items[0].name}</h1> : <h1>None</h1>}
