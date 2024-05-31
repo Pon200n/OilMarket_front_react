@@ -459,12 +459,7 @@ const CreateProductForm = observer(() => {
       <div style={{ display: "flex", justifyContent: "center" }}>
         <h2>Добавить товар lara</h2>
       </div>
-      <h4> lara name:{name}</h4>
-      <h4> lara brand:{brand}</h4>
-      <h4> lara price:{price}</h4>
-      <h4> lara category:{category}</h4>
-      <h4> lara img:{img}</h4>
-      <h4> lara description:{description}</h4>
+
       <div className="form_page_form_conteiner">
         <div>
           <label>

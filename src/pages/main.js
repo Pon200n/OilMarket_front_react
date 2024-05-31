@@ -159,7 +159,8 @@ export const Main = observer(() => {
 
   let pagesVeiwArr = [];
   function makePagesArrView() {
-    let delta = pageCount / 5 - 1;
+    //* let delta = Math.ceil(pageCount / 5 - 1);
+    let delta = 5;
     let Start = active - delta;
     if (pageCount <= 20) {
       for (let i = 0; i < pageCount; i++) {
@@ -185,42 +186,6 @@ export const Main = observer(() => {
       }
     }
   }
-  // *new pagination arr function start
-  // let pagesVeiwArr = [];
-  // function makePagesArrView() {
-  //   let psevdoActive = 13;
-  //   let psevdoPageCount = 13;
-  //   let delta = 5;
-  //   let Start = psevdoActive - delta;
-
-  //   if (Start > 0 && psevdoActive + delta <= psevdoPageCount) {
-  //     console.log("1");
-  //     for (
-  //       let start = psevdoActive - (delta + 1);
-  //       start < psevdoActive + delta;
-  //       start++
-  //     ) {
-  //       pagesVeiwArr.push(start + 1);
-  //     }
-  //   } else if (psevdoActive + delta > psevdoPageCount) {
-  //     console.log("2");
-
-  //     for (
-  //       let i = psevdoPageCount - (delta * 2 + 1);
-  //       i < psevdoPageCount;
-  //       i++
-  //     ) {
-  //       pagesVeiwArr.push(i + 1);
-  //     }
-  //   } else {
-  //     console.log("3");
-  //     console.log("Start", Start);
-
-  //     for (let i = 0; i < delta * 2 + 1; i++) {
-  //       pagesVeiwArr.push(i + 1);
-  //     }
-  //   }
-  // }
   // *new pagination arr function end
   makePagesArrView();
 
@@ -242,23 +207,6 @@ export const Main = observer(() => {
     counter *= -1;
     setItems([...itemsPage]);
   }
-  // * панель бургер
-  // let transform = "translateX(0%)";
-  // if (burgerContext) {
-  //   transform = "translateX(0%)";
-  // } else transform = "translateX(-100%)";
-  // *
-  // if (document.querySelector("footer").offsetHeight != 0) {
-  //   let footHeight = document.querySelector("footer").offsetHeight;
-  //   let headHeight = document.querySelector(".main_header").offsetHeight;
-  //   let docHeigth = document.documentElement.clientHeight;
-  //   let minHeight = docHeigth - (footHeight + headHeight);
-  // }
-  // let footHeight = document.querySelector("footer").offsetHeight;
-  // let headHeight = document.querySelector(".main_header").offsetHeight;
-  // let docHeigth = document.documentElement.clientHeight;
-  // let minHeight = docHeigth - (footHeight + headHeight);
-  // console.log(footHeight, headHeight, docHeigth, minHeight);
 
   const [toggleFilterSettings, setToggleFilterSettings] = useState(false);
 
@@ -358,7 +306,7 @@ export const Main = observer(() => {
         ) : (
           <h1>Нет данных</h1>
         )} */}
-        {product?.products ? (
+        {product.products.length > 0 ? (
           product?.products?.map((productL) => (
             // <div key={productL.id}>{productL.name}</div>
             <Card
