@@ -1,79 +1,23 @@
 import { useContext, useEffect, useState } from "react";
-import { SelectComponent } from "../../components/SelectComponent/SelectComponent";
-import { ValueSelectBar } from "../../components/ValueSelectBar/ValueSelectBar";
 import ValueSelectBarLara from "../../components/ValueSelectBarLara/ValueSelectBarLara";
-import { CategoryContext } from "../../context";
-import { BrandContext } from "../../context";
-import { CharsValuesContext } from "../../context";
+
 import { observer } from "mobx-react";
 import { mobxContext } from "../..";
 import { addProduct } from "../../http/productAPI";
+import "./CreateProductForm.css";
 const CreateProductForm = observer(() => {
   const { product } = useContext(mobxContext);
 
-  const [categoryContext, setCategoryContext] = useContext(CategoryContext);
-  const [brandContext, setBrandContext] = useContext(BrandContext);
-
-  const [req, setReq] = useState();
   const [img, setImg] = useState("img");
-  // const [id, setID] = useState(1);
   const [name, setName] = useState("");
   const [category, setCategory] = useState();
+  const [brand, setBrand] = useState("");
   const [price, setPrice] = useState("");
-  const [manufact, setManufact] = useState("");
-  const [countryManufact, setCountryManufact] = useState("");
-  const [baseOilType, setBaseOilType] = useState("Синтетическое");
-  const [engineType, setEngineType] = useState("");
-  const [SAE, setSAE] = useState("");
-  const [API, setAPI] = useState("");
-  const [ILSAC, setILSAC] = useState("");
-  const [tolerances, setTolerances] = useState("");
-  const [volume, setVolume] = useState("");
-  const [reccomend, setReccomend] = useState("");
-  const [discr, setDiscr] = useState("");
   const [file, setFile] = useState(0);
-  const [charsNames, setCharsNames] = useState([]);
-  const [allCharsNames, setAllCharsNames] = useState([]);
   const [values, setValues] = useState([]);
   const [description, setDescription] = useState([]);
 
-  const [charsValuesContext, setCharsValuesContext] =
-    useContext(CharsValuesContext);
-
-  function clickHandler() {
-    let qv = window.confirm("Отправить запрос на добавление товара?");
-    if (qv) {
-      fetch("http://oilmarket1/addProduct/index.php", {
-        method: "POST",
-        header: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: name,
-          category,
-          img,
-          price,
-          manufact,
-          countryManufact,
-          baseOilType,
-          engineType,
-          SAE,
-          API,
-          ILSAC,
-          tolerances,
-          volume,
-          reccomend,
-          discr,
-          prodCharsValues: JSON.stringify(charsValuesContext),
-        }),
-      })
-        .then((response) => response.text())
-        .then((response) => {
-          setReq(response);
-        });
-    }
-  }
-  //валидация поле цена
+  //*валидация поле цена
   let color;
   let display;
   if (price) {
@@ -83,11 +27,10 @@ const CreateProductForm = observer(() => {
     color = "red";
   }
 
-  // валидация кнопки
+  //* валидация кнопки
   let disabled;
-
   let styleContainer;
-  if (name && manufact && price && countryManufact) {
+  if (name && brand && price && category && description) {
     disabled = false;
     styleContainer = {
       background: "#4CAF50",
@@ -99,70 +42,18 @@ const CreateProductForm = observer(() => {
       background: "#ccc",
     };
   }
-  //   console.log(disabled);
-  //   console.log(name);
 
-  // загрузка файла
-  let selectFile = (e) => {
-    const formData = new FormData();
+  //* загрузка файла Laravel
 
-    formData.append("file", e.target.files[0], e.target.files[0].name);
-
-    // console.log([...formData.entries()]);
-    fetch("http://oilmarket1/getFile/index.php", {
-      method: "POST",
-      header: {
-        "Content-Type": "multipart/form-data",
-      },
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        setImg(response);
-      });
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
   };
 
-  // function state() {
-  //   if (charsNames) {
-  //     charsNames.map((x) => (window[({ x }, "set" + { x })] = useState()));
-  //   }
-  // }
-
-  function getChars() {
-    fetch(
-      "http://oilmarket1/getCharNameOfCatID/index.php/?categoryID=" + category
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        let chars = response?.chars;
-        let all_chars = response?.all_chars;
-        let values_res = response?.values;
-        // console.log("response", response);
-        // console.log("values", values_res);
-        setCharsNames(chars);
-        setAllCharsNames(all_chars);
-        setValues(values_res);
-      });
-  }
-
-  let newFiltredChars;
-
-  if (category) {
-    newFiltredChars = allCharsNames.filter((char) => {
-      if (char?.category_id === +category) {
-        return char;
-      }
-    });
-  }
-
   useEffect(() => {
-    getChars();
-    setCharsValuesContext([]);
     product.setProductValues([]);
   }, [category]);
 
   // ***lara
-  const [brand, setBrand] = useState("");
 
   let filtratedChars;
   if (product.categories) {
@@ -172,31 +63,40 @@ const CreateProductForm = observer(() => {
       }
     });
   }
-  // console.log("filtratedChars", filtratedChars);
-  // console.log("product.categories", product.categories);
-  // console.log("product.productValues", product.productValues);
 
   async function addProductLara() {
-    try {
-      await addProduct(
-        name,
-        price,
-        category,
-        brand,
-        product.productValues,
-        img,
-        description
-      ).then((response) => {
-        console.log(response.data);
-        product.setProducts(response.data);
-      });
-    } catch (e) {
-      alert(e);
+    const formData = new FormData();
+    formData.append("file", file);
+    //* console.log([...formData.entries()]);
+    // formData.append("values", product.productValues);
+    product.productValues.forEach((value, index) => {
+      formData.append(`values[${index}][char_id]`, value.char_id);
+      formData.append(`values[${index}][value]`, value.value);
+    });
+    formData.append("name", name);
+    formData.append("price", price);
+    formData.append("category_id", category);
+    formData.append("brand_id", brand);
+    formData.append("img", img);
+    formData.append("description", description);
+    let qv = window.confirm("Добавить товар?");
+    if (qv) {
+      try {
+        await addProduct(formData).then((response) => {
+          console.log(response.data);
+          product.setProducts(response.data);
+          alert(response.status);
+        });
+      } catch (e) {
+        alert(e);
+      }
     }
   }
+
   return (
     <>
-      {/* <>
+      <>
+        {/* <>
         <h5>{req}</h5>
         <h5>{img}</h5>
         <h5>{category}</h5>
@@ -452,9 +352,7 @@ const CreateProductForm = observer(() => {
           </div>
         </div>
       </> */}
-      {/* lara form !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/}
-      {/* lara form !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/}
-      {/* lara form !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/}
+      </>
 
       <div style={{ display: "flex", justifyContent: "center" }}>
         <h2>Добавить товар lara</h2>
@@ -573,6 +471,8 @@ const CreateProductForm = observer(() => {
           >
             Отправить
           </button>
+
+          <input type="file" name="file" onChange={handleFileChange} />
         </div>
       </div>
     </>

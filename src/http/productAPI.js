@@ -119,23 +119,11 @@ export const getProduct = async (id) => {
   return response;
 };
 
-export const addProduct = async (
-  name,
-  price,
-  category_id,
-  brand_id,
-  values,
-  img,
-  description
-) => {
-  const response = await $authHost.post("api/productAdmin", {
-    name,
-    price,
-    category_id,
-    brand_id,
-    values,
-    img,
-    description,
+export const addProduct = async (data) => {
+  const response = await $authHost.post("api/productAdmin", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
   return response;
 };

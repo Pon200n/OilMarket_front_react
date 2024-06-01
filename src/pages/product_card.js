@@ -164,11 +164,7 @@ export const ProductCard = observer(() => {
               {items?.name} {items?.SAE} {items?.volume}
             </div>
             <div className="cart_img_single">
-              <img
-                className="img_single"
-                src={"http://oilmarket1/static/" + items.img}
-                alt=""
-              />
+              <img className="img_single" src={items?.image?.url} alt="" />
               <div className="card_img_single_aside">
                 <div className="card_img_single_aside_content">
                   <div className="price_card">

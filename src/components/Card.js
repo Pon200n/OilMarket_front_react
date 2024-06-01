@@ -51,7 +51,7 @@ export function Card(props) {
             {" "}
             <img
               className="main_card_img"
-              src={"http://oilmarket1/static/" + props.item.img}
+              src={props?.item?.image?.url}
               alt=""
             />
           </Link>

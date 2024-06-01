@@ -264,8 +264,9 @@ export const Main = observer(() => {
       console.log("productsLARA", response?.data?.data);
       product.setProducts(response?.data?.data);
       setPageCount(response.data.meta.last_page);
-      console.log("meta", response.data.meta);
-      console.log("last_page", response.data.meta.last_page);
+      // console.log("meta", response.data.meta);
+      // console.log("prod", response?.data?.data);
+      // console.log("last_page", response.data.meta.last_page);
     });
   }
   useEffect(() => {
