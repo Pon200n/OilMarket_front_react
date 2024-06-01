@@ -1,0 +1,9 @@
+.modalWindowWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: rgb(189, 77, 77);
+    border-radius: 15px;
+    
+}
+

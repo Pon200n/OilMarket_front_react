@@ -47,12 +47,14 @@ import {
   getValuesLara,
 } from "./http/productAPI";
 import { setUserData } from "./http/userAPI";
+import ModalWindow from "./components/ModalWindow/ModalWindow";
 
 const App = observer(() => {
   //* mobx test
 
   const { user } = useContext(mobxContext);
   const { product } = useContext(mobxContext);
+  const { service } = useContext(mobxContext);
   // *
   const [context, setContext] = useState([]);
   const [userContext, setUserContext] = useState({});
@@ -272,7 +274,7 @@ const App = observer(() => {
                             >
                               <BrowserRouter>
                                 <Header></Header>
-
+                                <ModalWindow></ModalWindow>
                                 <Routes>
                                   <Route path="/" element={<Main />}></Route>
 
@@ -365,6 +367,15 @@ const App = observer(() => {
 
                                   {/* <Navigate to={"/"} replace /> */}
                                 </Routes>
+                                <button
+                                  onClick={() => {
+                                    service.setErrorMessage(
+                                      "new error message"
+                                    );
+                                  }}
+                                >
+                                  Test Error Modal
+                                </button>
                                 {/* <Footer></Footer> */}
                               </BrowserRouter>
                             </Page_CategoryPageContext.Provider>

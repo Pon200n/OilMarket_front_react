@@ -15,6 +15,7 @@ import { observer } from "mobx-react";
 export const ProductCard = observer(() => {
   const { product } = useContext(mobxContext);
   const { user } = useContext(mobxContext);
+  const { service } = useContext(mobxContext);
   useEffect(() => {
     // getProductByIDFromServ();
   }, []);
@@ -140,10 +141,14 @@ export const ProductCard = observer(() => {
   async function del() {
     const qvest = window.confirm("Хотите удалить карточку товара?");
     if (qvest) {
-      await deleteProduct(rout).then((response) => {
-        product.setProducts(response.data);
-        alert(response.status);
-      });
+      try {
+        await deleteProduct(rout).then((response) => {
+          product.setProducts(response.data);
+          alert(response.status);
+        });
+      } catch (error) {
+        service.setErrorMessage(error.message);
+      }
     }
   }
   useEffect(() => {

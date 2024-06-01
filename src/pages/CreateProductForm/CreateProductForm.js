@@ -8,7 +8,6 @@ import "./CreateProductForm.css";
 const CreateProductForm = observer(() => {
   const { product } = useContext(mobxContext);
 
-  // const [img, setImg] = useState();
   const [name, setName] = useState("");
   const [category, setCategory] = useState();
   const [brand, setBrand] = useState("");
@@ -77,7 +76,6 @@ const CreateProductForm = observer(() => {
     formData.append("price", price);
     formData.append("category_id", category);
     formData.append("brand_id", brand);
-    // formData.append("img", img);
     formData.append("description", description);
     let qv = window.confirm("Добавить товар?");
     if (qv) {
