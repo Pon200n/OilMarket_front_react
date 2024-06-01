@@ -50,14 +50,6 @@ export const ProductCard = observer(() => {
   //       JSON.parse(response);
   //     });
   // }
-  function del() {
-    const qvest = window.confirm("Хотите удалить карточку товара?");
-    if (qvest) {
-      // deleteFromBase();
-      deleteProductLara();
-      alert("Товар " + items.name + " удален.");
-    }
-  }
 
   //* Получить product по id из БД
   // function getProductByIDFromServ() {
@@ -145,12 +137,15 @@ export const ProductCard = observer(() => {
     });
   }
 
-  async function deleteProductLara() {
-    await deleteProduct(rout).then((response) => {
-      product.setProducts(response.data);
-    });
+  async function del() {
+    const qvest = window.confirm("Хотите удалить карточку товара?");
+    if (qvest) {
+      await deleteProduct(rout).then((response) => {
+        product.setProducts(response.data);
+        alert(response.status);
+      });
+    }
   }
-
   useEffect(() => {
     getProductLara();
   }, []);
