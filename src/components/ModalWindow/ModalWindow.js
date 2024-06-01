@@ -9,9 +9,18 @@ const ModalWindow = observer(() => {
   return (
     <>
       {service.error_message && (
-        <div className="modalWindowWrapper">
-          <h3>{service.error_message}</h3>
-          <button onClick={() => service.setErrorMessage("")}>X</button>
+        <div>
+          <div className="modalWindowWrapper">
+            <div className="modalWindowMessage">
+              <h3>{service.error_message}</h3>
+            </div>
+            <div
+              className="modalWindowCloseButton"
+              onClick={() => service.setErrorMessage("")}
+            >
+              X
+            </div>
+          </div>
         </div>
       )}
     </>

@@ -1,9 +1,23 @@
 .modalWindowWrapper{
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: space-between;
     background-color: rgb(189, 77, 77);
     border-radius: 15px;
     
 }
+.modalWindowMessage{
+    margin-right: auto; 
+    margin-left: auto;    
+}
+.modalWindowCloseButton{
+    color: aliceblue;
+    padding: 20px;
+    transition: all 500ms;
+}
 
+.modalWindowCloseButton:hover{
+    cursor: pointer;
+    color: rgb(173, 173, 196);
+    transform: rotate(180deg) scale(120%);
+}
