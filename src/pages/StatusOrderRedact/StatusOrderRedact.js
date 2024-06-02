@@ -1,16 +1,20 @@
 import { useState, useEffect, useContext } from "react";
 import { StatusContext } from "../../context";
-import { StatusPlate } from "../../components/StatusPlate/StatusPlate";
+import StatusPlate from "../../components/StatusPlate/StatusPlate";
+import { observer } from "mobx-react";
+import { mobxContext } from "../..";
+import { addStatus } from "../../http/orderAPI";
 
-export function StatusOrderRedact() {
+const StatusOrderRedact = observer(() => {
+  const { service } = useContext(mobxContext);
+  const { order } = useContext(mobxContext);
+
   const [statusName, setStatusName] = useState();
-  const [statusContext, setStatusContext] = useContext(StatusContext);
+
   const [req, setReq] = useState();
   const [badReq, setBadReq] = useState();
-  // const [stat, setStat] = useState([]);
 
   useEffect(() => {
-    getStatuses();
     setBadReq(false);
     setReq(false);
   }, [statusName]);
@@ -22,34 +26,21 @@ export function StatusOrderRedact() {
     disabled = true;
     disColor = "grey";
   }
-  async function addOrderStatus() {
-    let response = await fetch(
-      "http://oilmarket1/addOrderStatus/index.php/?status=" + statusName
-    );
-    let res = await response.json();
-    let status = await res.status;
-    let msg = await res.msg;
-    let arr = await res?.array;
-    if (status === "ok") {
-      setReq(msg);
-      setBadReq(false);
-      // setStat(arr);
-      setStatusContext(arr);
-    } else {
-      setBadReq(msg);
-      setReq(false);
+
+  // * lara 02.06.2024
+  async function addStatusLara() {
+    try {
+      let conf = window.confirm("Добавить статус " + statusName + " ?");
+      if (conf) {
+        await addStatus(statusName).then((response) => {
+          order.setStatuses(response.data.data);
+        });
+      }
+    } catch (e) {
+      service.setErrorMessage(e.message);
     }
   }
-  function getStatuses() {
-    fetch("http://oilmarket1/getStatuses/index.php")
-      .then((response) => response.json())
-      .then((response) => {
-        // console.log(response);
-        // setStat(response);
-        setStatusContext(response);
-      });
-  }
-  console.log(statusContext);
+
   return (
     <>
       <div className="head">
@@ -76,7 +67,7 @@ export function StatusOrderRedact() {
             type="submit"
             className="form_input_button"
             // onClick={() => console.log(statusName)}
-            onClick={addOrderStatus}
+            onClick={addStatusLara}
             disabled={disabled}
             style={{ background: disColor }}
             // style={styleContainer}
@@ -92,8 +83,14 @@ export function StatusOrderRedact() {
         </div>
       </div>
 
-      {statusContext &&
-        statusContext.map((item) => <StatusPlate key={item.id} item={item} />)}
+      {/* {statusContext &&
+        statusContext.map((item) => <StatusPlate key={item.id} item={item} />)} */}
+      {order.order_statuses &&
+        order.order_statuses.map((item) => (
+          <StatusPlate key={item.id} item={item} />
+        ))}
     </>
   );
-}
+});
+
+export default StatusOrderRedact;

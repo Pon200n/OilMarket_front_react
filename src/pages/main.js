@@ -258,16 +258,20 @@ export const Main = observer(() => {
 
   // * получение товаров с сервера laravel 26,05,2024
   const { product } = useContext(mobxContext);
+  const { service } = useContext(mobxContext);
 
   async function getProductsLara() {
-    await getProducts(page, perPage).then((response) => {
-      console.log("productsLARA", response?.data?.data);
-      product.setProducts(response?.data?.data);
-      setPageCount(response.data.meta.last_page);
-      // console.log("meta", response.data.meta);
-      // console.log("prod", response?.data?.data);
-      // console.log("last_page", response.data.meta.last_page);
-    });
+    try {
+      await getProducts(page, perPage).then((response) => {
+        product.setProducts(response?.data?.data);
+        setPageCount(response.data.meta.last_page);
+        // console.log("meta", response.data.meta);
+        // console.log("prod", response?.data?.data);
+        // console.log("last_page", response.data.meta.last_page);
+      });
+    } catch (e) {
+      service.setErrorMessage(e.message);
+    }
   }
   useEffect(() => {
     getProductsLara();

@@ -32,7 +32,7 @@ import { AddCategory } from "./pages/AddCategory/AddCategory.js";
 import { AddBrand } from "./pages/AddBrand/AddBrand.js";
 import { AdminPanel } from "./pages/AdminPanel/AdminPanel.js";
 import { OrderAdmin } from "./pages/OrderAdmin/OrderAdmin.js";
-import { StatusOrderRedact } from "./pages/StatusOrderRedact/StatusOrderRedact";
+import StatusOrderRedact from "./pages/StatusOrderRedact/StatusOrderRedact";
 import { OrdePageAdminRedact } from "./pages/OrdePageAdminRedact/OrdePageAdminRedact";
 import CharsAndValuesOfCat from "./pages/CharsAndValuesOfCat/CharsAndValuesOfCat";
 import { createContext } from "react";
@@ -48,14 +48,14 @@ import {
 } from "./http/productAPI";
 import { setUserData } from "./http/userAPI";
 import ModalWindow from "./components/ModalWindow/ModalWindow";
+import { getStatuses } from "./http/orderAPI";
 
 const App = observer(() => {
-  //* mobx test
-
   const { user } = useContext(mobxContext);
   const { product } = useContext(mobxContext);
   const { service } = useContext(mobxContext);
-  // *
+  const { order } = useContext(mobxContext);
+
   const [context, setContext] = useState([]);
   const [userContext, setUserContext] = useState({});
   const [basketContext, setBasketContext] = useState([]);
@@ -78,7 +78,7 @@ const App = observer(() => {
     getProdFrBask();
     getCategories();
     getBrands();
-    getStatuses();
+    // getStatuses();
     getAllCharsAndValues();
     // ???
     getCatsLara();
@@ -86,6 +86,7 @@ const App = observer(() => {
     setUserDataLara();
     getCatCharsLara();
     getCharValuesLara();
+    getStatusesLara();
     // getProductsLara();
   }, []);
   // *
@@ -176,13 +177,13 @@ const App = observer(() => {
     let brands = await response.json();
     setBrandContext(brands);
   }
-  function getStatuses() {
-    fetch("http://oilmarket1/getStatuses/index.php")
-      .then((response) => response.json())
-      .then((response) => {
-        setStatusContext(response);
-      });
-  }
+  // function getStatuses() {
+  //   fetch("http://oilmarket1/getStatuses/index.php")
+  //     .then((response) => response.json())
+  //     .then((response) => {
+  //       setStatusContext(response);
+  //     });
+  // }
   function getAllCharsAndValues() {
     fetch("http://oilmarket1/getAllCharsAndValues/index.php")
       .then((response) => response.json())
@@ -194,33 +195,65 @@ const App = observer(() => {
 
   // *lara
   async function getCatsLara() {
-    await getCategoriesLara().then((response) => {
-      product.setCategories(response.data.data);
-    });
+    try {
+      await getCategoriesLara().then((response) => {
+        product.setCategories(response.data.data);
+      });
+    } catch (e) {
+      service.setErrorMessage(e.message);
+    }
   }
   async function getCatCharsLara() {
-    await getCharsLara().then((response) => {
-      product.setChars(response.data.data);
-    });
+    try {
+      await getCharsLara().then((response) => {
+        product.setChars(response.data.data);
+      });
+    } catch (e) {
+      service.setErrorMessage(e.message);
+    }
   }
   async function getCharValuesLara() {
-    await getValuesLara().then((response) => {
-      product.setValues(response.data.data);
-    });
+    try {
+      await getValuesLara().then((response) => {
+        product.setValues(response.data.data);
+      });
+    } catch (e) {
+      service.setErrorMessage(e.message);
+    }
   }
 
   async function getBrandsLARA() {
-    await getBrandsLara().then((response) => {
-      product.setBrands(response.data.data);
-    });
+    try {
+      await getBrandsLara().then((response) => {
+        product.setBrands(response.data.data);
+      });
+    } catch (e) {
+      service.setErrorMessage(e.message);
+    }
   }
 
   async function setUserDataLara() {
-    await setUserData().then((response) => {
-      user.setThisUser(response.data);
-      user.setThisRole(response.data.role);
-      user.setThisAuth(true);
-    });
+    try {
+      await setUserData().then((response) => {
+        user.setThisUser(response.data);
+        user.setThisRole(response.data.role);
+        user.setThisAuth(true);
+      });
+    } catch (e) {
+      service.setErrorMessage(e.message);
+    }
+  }
+
+  async function getStatusesLara() {
+    try {
+      await getStatuses().then((response) => {
+        // console.log("getStatuses", response.data.data);
+        // console.log("order.order_statuses", order.order_statuses);
+        order.setStatuses(response.data.data);
+      });
+    } catch (e) {
+      service.setErrorMessage(e.message);
+    }
   }
 
   // async function getProductsLara() {

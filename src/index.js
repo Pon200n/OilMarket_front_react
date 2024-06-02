@@ -7,6 +7,7 @@ import { createContext } from "react";
 import UserStore from "./MobxStore/UserStore";
 import ProductStore from "./MobxStore/ProductStore";
 import ServiceStore from "./MobxStore/ServiceStore";
+import OrderStore from "./MobxStore/OrderStore";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -18,6 +19,7 @@ root.render(
       user: new UserStore(),
       product: new ProductStore(),
       service: new ServiceStore(),
+      order: new OrderStore(),
     }}
   >
     <App />
