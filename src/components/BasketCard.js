@@ -3,7 +3,7 @@ import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../userContext";
 import { BasketContext } from "../basketContext";
-import { deleteProductFromBasket } from "../http/orderAPI";
+import { deleteProductFromBasket, updateProductBasket } from "../http/orderAPI";
 import { observer } from "mobx-react";
 import { mobxContext } from "..";
 
@@ -56,13 +56,20 @@ const BasketCard = observer((props) => {
         );
       });
   }
+  async function updateProduct(Value) {
+    await updateProductBasket(props.product.id, Value).then((response) => {
+      console.log(response);
+      order.setUserBasketProducts(response.data.basket.basket_products);
+    });
+  }
   //* увеличение счетчика товара на еденицу
   function incrBlur() {
     const Value = +blur + 1;
     setBlur(+blur + 1);
     setSValue(Value);
 
-    updateCountBasket(Value);
+    // updateCountBasket(Value);
+    updateProduct(Value);
   }
 
   //* уменьшение счетчика товара на еденицу
@@ -72,19 +79,22 @@ const BasketCard = observer((props) => {
       setBlur(+blur - 1);
       setSValue(Value);
 
-      updateCountBasket(Value);
+      // updateCountBasket(Value);
+      updateProduct(Value);
     }
   }
   //*
   function blurFeth(a, Value) {
     if (Value > 0) {
       setSValue(Value);
-      updateCountBasket(Value);
+      // updateCountBasket(Value);
+      updateProduct(Value);
     } else {
       setSValue(1);
       setBlur(1);
 
-      updateCountBasket(1);
+      // updateCountBasket(1);
+      updateProduct(1);
     }
   }
 

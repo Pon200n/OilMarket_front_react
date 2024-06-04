@@ -36,3 +36,10 @@ export const deleteProductFromBasket = async (id) => {
   const response = await $authHost.delete("api/basket/" + id);
   return response;
 };
+
+export const updateProductBasket = async (product_id, product_count) => {
+  const response = await $authHost.patch("api/basket/" + product_id, {
+    product_count,
+  });
+  return response;
+};
