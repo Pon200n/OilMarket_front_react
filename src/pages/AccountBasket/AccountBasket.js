@@ -1,11 +1,16 @@
 import { UserContext } from "../../userContext";
 import { BasketContext } from "../../basketContext";
 import { useContext, useState, useEffect } from "react";
-import { BasketCard } from "../../components/BasketCard";
+import BasketCard from "../../components/BasketCard";
 import { CardFooter } from "../../components/CardFooter";
 import "./AccountBasket.css";
+import { mobxContext } from "../..";
+import { observer } from "mobx-react";
 
-export function AccountBasket() {
+const AccountBasket = observer(() => {
+  const { user } = useContext(mobxContext);
+  const { order } = useContext(mobxContext);
+
   useEffect(() => {
     getProdFrBask();
   }, []);
@@ -57,9 +62,7 @@ export function AccountBasket() {
         );
       });
   }
-  //   console.log("basketContext", basketContext);
-  //   console.log("items", items);
-  //*
+
   function delFromServBasket(id) {
     // console.log(id);
     fetch(
@@ -81,21 +84,20 @@ export function AccountBasket() {
         getProdFrBask();
       });
   }
-  //*
+
   function increaseCount(id) {
     console.log(id);
   }
-  //*
+
   function chengeValueCount(id, value) {
     console.log(id, value);
   }
-  //*
 
   let display;
   let item_display;
   let button_display;
   let basketItem;
-  // * текущая дата
+
   let date = new Date();
 
   if (items) {
@@ -133,7 +135,7 @@ export function AccountBasket() {
     button_disabled = false;
   }
 
-  async function order() {
+  async function orderLega() {
     let date = new Date();
     let ndate = date.toLocaleString("ru");
     let res = await fetch(
@@ -148,14 +150,13 @@ export function AccountBasket() {
     console.log(ord);
   }
 
-  // let footHeight = document.querySelector("footer").offsetHeight;
-  // let headHeight = document.querySelector(".main_header").offsetHeight;
-  // let docHeigth = document.documentElement.clientHeight;
-  // let minHeight = docHeigth - (footHeight + headHeight);
-
   return (
     // <div className="content_wrapper" style={{ minHeight: minHeight }}>
     <>
+      <button onClick={() => console.log(order.user_basket_products)}>
+        basket log
+      </button>
+
       <div className="content_wrapper">
         <div className="ABasket_head">
           <h2 style={{ display: item_display }}>Корзина товаров</h2>
@@ -167,6 +168,12 @@ export function AccountBasket() {
           </div>
         </div>
         <div style={{ display: item_display }}>{basketItem}</div>
+
+        {order.user_basket_products &&
+          order.user_basket_products.map((product) => (
+            <BasketCard key={product.id} product={product} />
+          ))}
+
         <CardFooter />
       </div>
       <div className="form_page_form_conteiner">
@@ -203,7 +210,7 @@ export function AccountBasket() {
               }}
               // onClick={() => alert(new Date())}
               // onClick={() => console.log(basketContext, userContext, new Date())}
-              onClick={order}
+              onClick={orderLega}
               disabled={button_disabled}
             >
               Заказать
@@ -213,4 +220,6 @@ export function AccountBasket() {
       </div>
     </>
   );
-}
+});
+
+export default AccountBasket;

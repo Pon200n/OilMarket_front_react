@@ -1,5 +1,5 @@
 import { $authHost, $host } from "./index";
-
+// *  статус
 export const getStatuses = async () => {
   const response = await $host.get("api/statusesPublic");
   return response;
@@ -18,5 +18,21 @@ export const updateStatus = async (id, status_name) => {
 
 export const deleteStatus = async (id) => {
   const response = await $authHost.delete("api/statusesAdmin/" + id);
+  return response;
+};
+
+// *корзина
+export const addProductToBasket = async (product_id) => {
+  const response = await $authHost.post("api/basket", { product_id });
+  return response;
+};
+
+export const getUserProductsFromBasket = async () => {
+  const response = await $authHost.get("api/basket");
+  return response;
+};
+
+export const deleteProductFromBasket = async (id) => {
+  const response = await $authHost.delete("api/basket/" + id);
   return response;
 };

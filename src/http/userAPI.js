@@ -1,13 +1,34 @@
 import { $authHost, $host } from "./index";
 
+// export const registration = async (
+//   name,
+//   email,
+//   password,
+//   password_confirmation
+// ) => {
+//   const response = await $host.post("api/registration", {
+//     name,
+//     email,
+//     password,
+//     password_confirmation,
+//   });
+//   return response;
+// };
+
 export const registration = async (
   name,
+  second_name,
+  patronymic,
+  phone,
   email,
   password,
   password_confirmation
 ) => {
-  const response = await $host.post("api/registration", {
+  const response = await $host.post("api/register", {
     name,
+    second_name,
+    patronymic,
+    phone,
     email,
     password,
     password_confirmation,

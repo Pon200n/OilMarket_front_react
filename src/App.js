@@ -21,12 +21,12 @@ import { BasketContext } from "./basketContext";
 import { CategoryPage } from "./pages/CategoryPage/CategoryPage.js";
 import { ComparePage } from "./pages/ComparePage/ComparePage";
 import CreateProductForm from "./pages/CreateProductForm/CreateProductForm";
-import { RegistrationPage } from "./pages/RegistrationPage/RegistrationPage";
+import RegistrationPage from "./pages/RegistrationPage/RegistrationPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import BonusPage from "./pages/BonusPage/BonusPage";
 import { TestPage } from "./pages/TestPage/TestPage";
 import { PersonalAccount } from "./pages/PersonalAccount/PersonalAccount";
-import { AccountBasket } from "./pages/AccountBasket/AccountBasket";
+import AccountBasket from "./pages/AccountBasket/AccountBasket";
 import { OrderUserPage } from "./pages/OrderUserPage/OrderUserPage.js";
 import { AddCategory } from "./pages/AddCategory/AddCategory.js";
 import { AddBrand } from "./pages/AddBrand/AddBrand.js";
@@ -35,8 +35,6 @@ import { OrderAdmin } from "./pages/OrderAdmin/OrderAdmin.js";
 import StatusOrderRedact from "./pages/StatusOrderRedact/StatusOrderRedact";
 import { OrdePageAdminRedact } from "./pages/OrdePageAdminRedact/OrdePageAdminRedact";
 import CharsAndValuesOfCat from "./pages/CharsAndValuesOfCat/CharsAndValuesOfCat";
-import { createContext } from "react";
-import UserStore from "./MobxStore/UserStore";
 import { observer } from "mobx-react";
 import { mobxContext } from ".";
 import {
@@ -48,7 +46,7 @@ import {
 } from "./http/productAPI";
 import { setUserData } from "./http/userAPI";
 import ModalWindow from "./components/ModalWindow/ModalWindow";
-import { getStatuses } from "./http/orderAPI";
+import { getStatuses, getUserProductsFromBasket } from "./http/orderAPI";
 
 const App = observer(() => {
   const { user } = useContext(mobxContext);
@@ -87,6 +85,7 @@ const App = observer(() => {
     getCatCharsLara();
     getCharValuesLara();
     getStatusesLara();
+    getUserProductsFromBasketLara();
     // getProductsLara();
   }, []);
   // *
@@ -250,6 +249,16 @@ const App = observer(() => {
         // console.log("getStatuses", response.data.data);
         // console.log("order.order_statuses", order.order_statuses);
         order.setStatuses(response.data.data);
+      });
+    } catch (e) {
+      service.setErrorMessage(e.message);
+    }
+  }
+  async function getUserProductsFromBasketLara() {
+    try {
+      await getUserProductsFromBasket().then((response) => {
+        console.log("ProductsFromBasket main", response);
+        order.setUserBasketProducts(response.data.basket.basket_products);
       });
     } catch (e) {
       service.setErrorMessage(e.message);

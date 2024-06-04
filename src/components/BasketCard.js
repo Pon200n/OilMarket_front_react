@@ -3,21 +3,26 @@ import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../userContext";
 import { BasketContext } from "../basketContext";
+import { deleteProductFromBasket } from "../http/orderAPI";
+import { observer } from "mobx-react";
+import { mobxContext } from "..";
 
-export function BasketCard(props) {
-  let chengeValue = props.chengeValue;
-  let chengeValueCount = props.chengeValueCount;
-  let getProdFrBask = props.getProdFrBask;
+const BasketCard = observer((props) => {
+  const { order } = useContext(mobxContext);
+
+  let chengeValue = props?.chengeValue;
+  let chengeValueCount = props?.chengeValueCount;
+  let getProdFrBask = props?.getProdFrBask;
   useEffect(() => {
-    getProdFrBask();
+    // getProdFrBask();
   }, []);
 
   const priceForm = new Intl.NumberFormat();
   const [userContext, setUserContext] = useContext(UserContext);
   const [basketContext, setBasketContext] = useContext(BasketContext);
 
-  const [blur, setBlur] = useState(props?.p?.product_count);
-  const [SValue, setSValue] = useState(props?.p?.product_count);
+  const [blur, setBlur] = useState(props?.product?.product_count);
+  const [SValue, setSValue] = useState(props?.product?.product_count);
 
   function updateCountBasket(Value) {
     fetch(
@@ -83,6 +88,14 @@ export function BasketCard(props) {
     }
   }
 
+  // **** laravel 04.06.2024
+  async function deleteProductFromBasketLara() {
+    await deleteProductFromBasket(props.product.id).then((response) => {
+      console.log(response);
+      order.setUserBasketProducts(response.data.basket.basket_products);
+    });
+  }
+
   return (
     <div>
       {/* <div className="adaptBasket"></div> */}
@@ -90,23 +103,27 @@ export function BasketCard(props) {
       <div className="wrapper_basket_upper">
         <div className="wrapper_basket">
           <div className="basket_img">
-            <Link to={`/product/${props?.p?.id}`}>
+            <Link to={`/product/${props?.product?.product_id}`}>
               <img
                 className="basket_img1"
-                src={"http://oilmarket1/static/" + props?.p?.img}
+                src={props?.product?.products?.image?.url}
                 alt=""
               />
             </Link>
           </div>
 
           <div className="basket_product_name">
-            <Link to={`/product/${props?.p?.id}`} className="name_char_href">
-              {props.p.manufact} {props?.p?.name}, {props?.p?.volume}
+            <Link
+              to={`/product/${props?.product?.product_id}`}
+              className="name_char_href"
+            >
+              {props?.product?.products?.brand?.brand_name}{" "}
+              {props?.product?.products?.name} {props?.p?.volume}
             </Link>
           </div>
 
           <div className="basket_price">
-            {priceForm.format(props?.p?.price)} ₽
+            {priceForm.format(props?.product?.products?.price)} ₽
           </div>
 
           <div className="basket_quantity">
@@ -129,19 +146,22 @@ export function BasketCard(props) {
             </div>
           </div>
           <div className="basket_sum">
-            {priceForm.format(props?.p?.price * SValue)} ₽
+            {priceForm.format(props?.product?.products?.price * SValue)} ₽
           </div>
 
           <div className="basket_button_delete">
             <button
               className="button_delete"
-              onClick={props?.delFromServerBasket}
+              onClick={deleteProductFromBasketLara}
+              // onClick={props?.delFromServerBasket}
             >
               X<span id="bsCardSpanDelete">Удалить</span>
             </button>
+            <button onClick={() => console.log(props?.product)}>log</button>
           </div>
         </div>
       </div>
     </div>
   );
-}
+});
+export default BasketCard;

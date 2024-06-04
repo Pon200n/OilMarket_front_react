@@ -95,6 +95,7 @@ export const ProductCard = observer(() => {
   }
   let [items, setItems] = useState();
   const priceForm = new Intl.NumberFormat();
+
   //*Добавить product в корзину на сервер
   function addToBasketProduct() {
     fetch(

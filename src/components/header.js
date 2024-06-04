@@ -14,6 +14,8 @@ import { observer } from "mobx-react";
 export const Header = observer(() => {
   const { user } = useContext(mobxContext);
   const { product } = useContext(mobxContext);
+  const { order } = useContext(mobxContext);
+
   const [context, setContext] = useContext(Context);
   const [userContext, setUserContext] = useContext(UserContext);
   const [basketContext, setBasketContext] = useContext(BasketContext);
@@ -30,20 +32,18 @@ export const Header = observer(() => {
     (sum, item) => sum + item.product_count,
     0
   );
-  // useEffect(() => {
-  //   hidePhoneNumber();
-  // }, [basketContext, totalBasketCount]);
-  // console.log("bk", basketContext);
+
   let display;
   if (totalBasketCount > 0) {
     display = "inline";
   } else display = "none";
+
   let adminDisplay;
   if (userContext.role == "admin") {
     adminDisplay = "flex";
   } else adminDisplay = "none";
-  // * скрывать номер телефона
 
+  // * скрывать номер телефона
   const [hidePhoneNumber, setHidePhoneNumber] = useState(false);
 
   return (
@@ -260,6 +260,11 @@ export const Header = observer(() => {
             <span className="headerBasketCount" style={{ display: display }}>
               {totalBasketCount}
             </span>
+            {order.user_basket_products.length > 0 && (
+              <span className="headerBasketCount">
+                {order.user_basket_products.length}
+              </span>
+            )}
           </div>
         </div>
       </div>

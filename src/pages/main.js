@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import axios from "axios";
-import { Card } from "../components/Card";
+import Card from "../components/Card";
 import { Context } from "../context";
 import { BurgerContext } from "../context";
 import { useState } from "react";

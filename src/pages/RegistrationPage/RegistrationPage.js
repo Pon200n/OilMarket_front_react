@@ -1,7 +1,13 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./RegistrationPage.css";
-export function RegistrationPage() {
+import { observer } from "mobx-react";
+import { mobxContext } from "../..";
+import { registration } from "../../http/userAPI";
+
+export const RegistrationPage = observer(() => {
+  const { service } = useContext(mobxContext);
+
   // const [req, setReq] = useState();
   // const [badReq, setBadReq] = useState();
 
@@ -59,37 +65,48 @@ export function RegistrationPage() {
   let password = useRef();
   let password_confirmation = useRef();
 
-  function registration() {
-    fetch("http://127.0.0.1:8000/api/register", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        // "X-CSRF-TOKEN":
-        // "eyJpdiI6Ik05ZnBMVWgrSnpmZ2xNcGh3SHBqWFE9PSIsInZhbHVlIjoiY0tJNXBTV0ZEa3ZnOXpoeVVHanZqdk0rSldyQlVkTkZTdHBZdTNWd210SkQ4eG9zQk94ODJldy9MS2R1ZEd3T0tqK1l0THhPQ0VwNHRzYjlqVHAvRmFnMk5WZTB5cEFBVzBUbEpDd0c1Y1BhK0J5K3hUT2FYZlN1N0ZhYkxmVCsiLCJtYWMiOiIxMjIxOTM5YzNiNWJjM2M1ZWEzZWI1NDQwMWE2OGRjYzNmZjE2ZWFmYWNkNmRhZjllNDcxYjk2ZDU5MjY3YmFkIiwidGFnIjoiIn0=",
-        // "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vb2lsbWFya2V0MS9waHAtand0LyIsImF1ZCI6Imh0dHA6Ly9vaWxtYXJrZXQxL3BocC1qd3QvIiwiaWF0IjoxNzAzMzA4MDc1LCJleHAiOjE3MDMzMTE2NzUsImRhdGEiOnsiaWQiOiIxMyIsInJvbGUiOiJ1c2VyIiwibmlrIjoicGV0ZTIifX0.EgT3npphbOxLcyrF98SCFEaOJpsJrdos6Dr4ZKATuqE",
-        // "eyJ0eXAiOiJKsdfgsdfsdfdsffffgzI1NiJ9.eyJpc3MiOiJodfsfsdfsfsfsdfIsImF1ZCI6Imh0dHA6Ly9vaWxtYXJrZXQxL3BocC1qd3QvIiwiaWF0IjoxNzAzMzA4MDc1LCJleHAiOjE3MDMzMTE2NzUsImRhdGEiOnsiaWQiOiIxMyIsInJvbGUiOiJ1c2VyIiwibmlrIjoicGV0ZTIifX0.sdfsgsdfgsdftbttsdfgsdfg434Jrdos6Dr4ZKATuqE",
-      },
-      body: JSON.stringify({
-        name: nameRef.current.value,
-        second_name: second_name.current.value,
-        patronymic: patronymic.current.value,
-        phone: phone.current.value,
-        email: email.current.value,
-        password: password.current.value,
-        password_confirmation: password_confirmation.current.value,
-      }),
-    })
-      .then((response) => response.text())
-      .then((response) => {
-        console.log(response);
-      });
-  }
   // function registration() {
-  //   fetch("http://127.0.0.1:8000")
+  //   fetch("http://127.0.0.1:8000/api/register", {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //       // "X-CSRF-TOKEN":
+  //       // "eyJpdiI6Ik05ZnBMVWgrSnpmZ2xNcGh3SHBqWFE9PSIsInZhbHVlIjoiY0tJNXBTV0ZEa3ZnOXpoeVVHanZqdk0rSldyQlVkTkZTdHBZdTNWd210SkQ4eG9zQk94ODJldy9MS2R1ZEd3T0tqK1l0THhPQ0VwNHRzYjlqVHAvRmFnMk5WZTB5cEFBVzBUbEpDd0c1Y1BhK0J5K3hUT2FYZlN1N0ZhYkxmVCsiLCJtYWMiOiIxMjIxOTM5YzNiNWJjM2M1ZWEzZWI1NDQwMWE2OGRjYzNmZjE2ZWFmYWNkNmRhZjllNDcxYjk2ZDU5MjY3YmFkIiwidGFnIjoiIn0=",
+  //       // "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vb2lsbWFya2V0MS9waHAtand0LyIsImF1ZCI6Imh0dHA6Ly9vaWxtYXJrZXQxL3BocC1qd3QvIiwiaWF0IjoxNzAzMzA4MDc1LCJleHAiOjE3MDMzMTE2NzUsImRhdGEiOnsiaWQiOiIxMyIsInJvbGUiOiJ1c2VyIiwibmlrIjoicGV0ZTIifX0.EgT3npphbOxLcyrF98SCFEaOJpsJrdos6Dr4ZKATuqE",
+  //       // "eyJ0eXAiOiJKsdfgsdfsdfdsffffgzI1NiJ9.eyJpc3MiOiJodfsfsdfsfsfsdfIsImF1ZCI6Imh0dHA6Ly9vaWxtYXJrZXQxL3BocC1qd3QvIiwiaWF0IjoxNzAzMzA4MDc1LCJleHAiOjE3MDMzMTE2NzUsImRhdGEiOnsiaWQiOiIxMyIsInJvbGUiOiJ1c2VyIiwibmlrIjoicGV0ZTIifX0.sdfsgsdfgsdftbttsdfgsdfg434Jrdos6Dr4ZKATuqE",
+  //     },
+  //     body: JSON.stringify({
+  //       name: nameRef.current.value,
+  //       second_name: second_name.current.value,
+  //       patronymic: patronymic.current.value,
+  //       phone: phone.current.value,
+  //       email: email.current.value,
+  //       password: password.current.value,
+  //       password_confirmation: password_confirmation.current.value,
+  //     }),
+  //   })
   //     .then((response) => response.text())
-  //     .then((response) => console.log(response));
+  //     .then((response) => {
+  //       console.log(response);
+  //     });
   // }
+
+  async function registrationLara() {
+    try {
+      await registration(
+        nameRef.current.value,
+        second_name.current.value,
+        patronymic.current.value,
+        phone.current.value,
+        email.current.value,
+        password.current.value,
+        password_confirmation.current.value
+      ).then((response) => console.log(response));
+    } catch (e) {
+      service.setErrorMessage(e.message);
+    }
+  }
   return (
     <>
       <div className="form_page_form_conteiner">
@@ -307,11 +324,13 @@ export function RegistrationPage() {
           </label>
           {/* {badReq && <div className="regError">{badReq}</div>} */}
           <br />
-          <button onClick={registration} className="form_input_button auth">
+
+          <button onClick={registrationLara} className="form_input_button auth">
             Отправить
           </button>
         </div>
       </div>
     </>
   );
-}
+});
+export default RegistrationPage;

@@ -1,46 +1,20 @@
 import { Link } from "react-router-dom";
-import { useContext, useState } from "react";
-import { BasketContext } from "../basketContext";
-import { UserContext } from "../userContext";
+import { useContext } from "react";
+import { observer } from "mobx-react";
 
-export function Card(props) {
+import { addProductToBasket } from "../http/orderAPI";
+import { mobxContext } from "..";
+
+const Card = observer((props) => {
+  const { order } = useContext(mobxContext);
   const priceForm = new Intl.NumberFormat();
-  const [userContext, setUserContext] = useContext(UserContext);
-  const [basketContext, setBasketContext] = useContext(BasketContext);
 
-  // //*Добавить product в корзину на сервер
-  function addToBasketProduct() {
-    fetch(
-      "http://oilmarket1/addProductToBasket/?productId=" +
-        props.item.id +
-        "&userId=" +
-        userContext.id,
-      {
-        method: "GET",
-        header: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => response.text())
-      .then((response) => {
-        console.log("с сервера", JSON.parse(response));
-
-        setBasketContext(
-          JSON.parse(response, function (key, value) {
-            if (
-              key === "id" ||
-              key === "count" ||
-              key === "product_count" ||
-              key === "price" ||
-              key === "priceTotal"
-            )
-              return +value;
-            return value;
-          })
-        );
-      });
-    alert("товар добавлен в корзину");
+  async function addProductToBasketLara() {
+    await addProductToBasket(props.item.id).then((response) => {
+      console.log("basket response", response);
+      order.setUserBasketProducts(response.data.basket.basket_products);
+      // console.log("mobx order store get", order.user_basket_products);
+    });
   }
 
   return (
@@ -89,7 +63,7 @@ export function Card(props) {
           </div>
           <div className="price">{priceForm.format(props.item.price)} ₽</div>
           <div className="but_bask">
-            <button onClick={addToBasketProduct}>В корзину</button>
+            <button onClick={addProductToBasketLara}>В корзину</button>
           </div>
           {/* <div className="bay">
           <a href="" className="bay_oneclick">
@@ -101,4 +75,5 @@ export function Card(props) {
       {/* </div> */}
     </div>
   );
-}
+});
+export default Card;

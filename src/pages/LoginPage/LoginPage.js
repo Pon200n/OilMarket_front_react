@@ -7,6 +7,7 @@ import { mobxContext } from "../../index";
 
 const LoginPage = observer(() => {
   const { user } = useContext(mobxContext);
+  const { order } = useContext(mobxContext);
 
   const [nikName, setNikname] = useState("");
   const [password, setPassword] = useState("");
@@ -119,16 +120,18 @@ const LoginPage = observer(() => {
         LaraUserEmail,
         LaraUserPassword
       );
-      console.log(response);
-      console.log("role", response.data.role);
-      console.log("token", response.data.token);
-      console.log("user", response.data.user);
-      console.log("role", response.data.role);
+      // console.log(response);
+      // console.log("role", response.data.role);
+      // console.log("token", response.data.token);
+      // console.log("user", response.data.user);
+      // console.log("role", response.data.role);
+      console.log("basket_products", response.data.user.basket.basket_products);
       user.setThisUser(response.data.user);
       user.setThisAuth(true);
       user.setThisRole(response.data.role);
+      order.setUserBasketProducts(response.data.user.basket.basket_products);
     } catch (error) {
-      alert(error.response.data.message);
+      alert(error.message);
     }
   };
   const testInt = async () => {
