@@ -1,73 +1,39 @@
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { Context } from "../context";
 import { BurgerContext } from "../context";
-import { BrandContext } from "../context";
 import { CategoryContext } from "../context";
-import { UserContext } from "../userContext";
-import { BasketContext } from "../basketContext";
 import { HeaderMobilePanel } from "./HeaderMobilePanel/HeaderMobilePanel.js";
 import { BurgerMenuPanel } from "./BurgerMenuPanel/BurgerMenuPanel.js";
 import { HeaderSubBrandMenu } from "./HeaderSubBrandMenu/HeaderSubBrandMenu";
 import { mobxContext } from "../index";
 import { observer } from "mobx-react";
+
 export const Header = observer(() => {
   const { user } = useContext(mobxContext);
   const { product } = useContext(mobxContext);
   const { order } = useContext(mobxContext);
 
-  const [context, setContext] = useContext(Context);
-  const [userContext, setUserContext] = useContext(UserContext);
-  const [basketContext, setBasketContext] = useContext(BasketContext);
   const [burgerContext, setBurgerContext] = useContext(BurgerContext);
-  const [brandContext, setBrandContext] = useContext(BrandContext);
   const [categoryContext, setCategoryContext] = useContext(CategoryContext);
-  const [hide, setHide] = useState("none");
 
   useEffect(() => {
     setBurgerContext(false);
   }, []);
 
-  let totalBasketCount = basketContext.reduce(
+  let totalBasketCount = order.user_basket_products.reduce(
     (sum, item) => sum + item.product_count,
     0
   );
 
-  let display;
-  if (totalBasketCount > 0) {
-    display = "inline";
-  } else display = "none";
-
-  let adminDisplay;
-  if (userContext.role == "admin") {
-    adminDisplay = "flex";
-  } else adminDisplay = "none";
-
-  // * скрывать номер телефона
   const [hidePhoneNumber, setHidePhoneNumber] = useState(false);
 
   return (
     <div className="main_header">
       <div className="reg_wrapper">
-        {/* <span className="headerBasketCount"> {totalBasketCount} </span> */}
-
         <div className="reg">
-          {userContext.id ? (
-            <div className="regInterLeft">
-              <Link to="/personalAccount" className="btn_top">
-                {/* id={userContext.id}
-                role={userContext.role} */}
-                Личный кабинет
-              </Link>
-            </div>
-          ) : (
-            <></>
-          )}
           {user.isAuth ? (
             <div className="regInterLeft">
               <Link to="/personalAccount" className="btn_top">
-                {/* id={userContext.id}
-                role={userContext.role} */}
                 Личный кабинет
               </Link>
             </div>
@@ -89,34 +55,9 @@ export const Header = observer(() => {
         </div>
       </div>
 
-      <div style={{ display: adminDisplay }} className="item1">
-        <div className="city">
-          <Link to="/admin_panel" className="btn_top">
-            Админпанель
-          </Link>
-        </div>
-        <ul className="ul_it1">
-          <li className="li_it">
-            <Link to="/createProduct" className="btn_top">
-              Добавить товар
-            </Link>
-          </li>
-          <li className="li_it">
-            <Link to="/add_category" className="btn_top">
-              Добавить категорию
-            </Link>
-          </li>
-          <li className="li_it">
-            <Link to="/add_brand" className="btn_top">
-              Добавить бренд
-            </Link>
-          </li>
-        </ul>
-      </div>
-
       {user.role === "admin" && (
         <>
-          <div style={{ display: adminDisplay }} className="item1">
+          <div className="item1">
             <div className="city">
               <Link to="/admin_panel" className="btn_top">
                 Админпанель
@@ -178,7 +119,6 @@ export const Header = observer(() => {
               alt=""
             />
 
-            {/* <div className="it_block_1" style={{ display: hide }}> */}
             {hidePhoneNumber && (
               <div className="it_block_1">
                 <div className="tel_1">8 800-600-01-01</div>
@@ -257,13 +197,9 @@ export const Header = observer(() => {
               />
               <span className="icon_iside">Корзина</span>
             </Link>
-            <span className="headerBasketCount" style={{ display: display }}>
-              {totalBasketCount}
-            </span>
+
             {order.user_basket_products.length > 0 && (
-              <span className="headerBasketCount">
-                {order.user_basket_products.length}
-              </span>
+              <span className="headerBasketCount">{totalBasketCount}</span>
             )}
           </div>
         </div>

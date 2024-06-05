@@ -1,7 +1,20 @@
 import { useContext } from "react";
+import { mobxContext } from "..";
 import { BasketContext } from "../basketContext";
+import { observer } from "mobx-react";
 
-export function CardFooter() {
+const CardFooter = observer(() => {
+  const { order } = useContext(mobxContext);
+
+  let totalBasketCountLara = order.user_basket_products.reduce(
+    (sum, item) => sum + item.product_count,
+    0
+  );
+
+  let totalBasketPriceLara = order.user_basket_products.reduce(
+    (sum, item) => sum + item.products.price * item.product_count,
+    0
+  );
   const [basketContext, setBasketContext] = useContext(BasketContext);
   let totalBasketCount = basketContext.reduce(
     (sum, item) => sum + item.product_count,
@@ -29,16 +42,18 @@ export function CardFooter() {
     display = "none";
   }
   return (
-    // <div>
-    <div style={{ display: display }}>
-      <div className="cardFooter">
-        <div className="cardFooter_totalCount">
-          <h4>В корзине сейчас товаров {totalBasketCount} ед.</h4>
+    <div>
+      {order?.user_basket_products?.length > 0 && (
+        <div className="cardFooter">
+          <div className="cardFooter_totalCount">
+            <h4>В корзине сейчас товаров {totalBasketCountLara} ед.</h4>
+          </div>
+          <div className="cardFooter_totalBasketPrice">
+            <h4>на сумму {priceForm.format(totalBasketPriceLara)} ₽</h4>
+          </div>
         </div>
-        <div className="cardFooter_totalBasketPrice">
-          <h4>на сумму {priceForm.format(totalBasketPrice)} ₽</h4>
-        </div>
-      </div>
+      )}
     </div>
   );
-}
+});
+export default CardFooter;

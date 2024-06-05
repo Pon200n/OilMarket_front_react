@@ -2,13 +2,12 @@ import { UserContext } from "../../userContext";
 import { BasketContext } from "../../basketContext";
 import { useContext, useState, useEffect } from "react";
 import BasketCard from "../../components/BasketCard";
-import { CardFooter } from "../../components/CardFooter";
+import CardFooter from "../../components/CardFooter";
 import "./AccountBasket.css";
 import { mobxContext } from "../..";
 import { observer } from "mobx-react";
 
 const AccountBasket = observer(() => {
-  const { user } = useContext(mobxContext);
   const { order } = useContext(mobxContext);
 
   useEffect(() => {
@@ -151,23 +150,25 @@ const AccountBasket = observer(() => {
   }
 
   return (
-    // <div className="content_wrapper" style={{ minHeight: minHeight }}>
     <>
       <button onClick={() => console.log(order.user_basket_products)}>
         basket log
       </button>
 
       <div className="content_wrapper">
-        <div className="ABasket_head">
-          <h2 style={{ display: item_display }}>Корзина товаров</h2>
-        </div>
-
-        <div style={{ display: display }}>
+        {order.user_basket_products.length > 0 && (
           <div className="ABasket_head">
-            <h2>Сейчас ваша корзина товаров пуста :(</h2>
+            <h2>Корзина товаров</h2>
           </div>
-        </div>
-        <div style={{ display: item_display }}>{basketItem}</div>
+        )}
+
+        {order.user_basket_products.length == 0 && (
+          <div className="ABasket_head">
+            <h2>Сейчас ваша корзина товаров пуста.</h2>
+          </div>
+        )}
+
+        {/* <div style={{ display: item_display }}>{basketItem}</div> */}
 
         {order.user_basket_products &&
           order.user_basket_products.map((product) => (
@@ -177,46 +178,42 @@ const AccountBasket = observer(() => {
         <CardFooter />
       </div>
       <div className="form_page_form_conteiner">
-        <div style={{ display: item_display }}>
-          <label>
-            Укажите место доставки:
-            <input
-              id="delivery_place"
-              name="delivery_place"
-              className="input_form"
-              type="text"
-              value={deliveryPlace}
-              onChange={(event) => setDeliveryPlace(event.target.value)}
-            />
-          </label>
-          {!deliveryPlace && (
-            <div style={{ color: "red", display: item_display }}>
-              Необходимо указать место доставки
+        {order.user_basket_products.length > 0 && (
+          <div>
+            <label>
+              Укажите место доставки:
+              <input
+                id="delivery_place"
+                name="delivery_place"
+                className="input_form"
+                type="text"
+                value={deliveryPlace}
+                onChange={(event) => setDeliveryPlace(event.target.value)}
+              />
+            </label>
+            {!deliveryPlace && (
+              <div style={{ color: "red", display: item_display }}>
+                Необходимо указать место доставки
+              </div>
+            )}
+            <br />
+            {/* {badReq && <div className="regErrorBr">{badReq}</div>} */}
+            {/* {req && <div className="regSuccessBr">{req}</div>}  */}
+            <div className="ABasket_head">
+              <button
+                type="submit"
+                className="form_input_button"
+                style={{
+                  background: disColor,
+                }}
+                onClick={orderLega}
+                disabled={button_disabled}
+              >
+                Заказать
+              </button>
             </div>
-          )}
-          <br />
-          {/* {badReq && <div className="regErrorBr">{badReq}</div>} */}
-          {/* {req && <div className="regSuccessBr">{req}</div>}  */}
-          <div style={{ display: button_display }} className="ABasket_head">
-            <button
-              type="submit"
-              // className="order_button"
-              className="form_input_button"
-              style={{
-                // width: "100px",
-                // display: "flex",
-                // alignItems: "center",
-                background: disColor,
-              }}
-              // onClick={() => alert(new Date())}
-              // onClick={() => console.log(basketContext, userContext, new Date())}
-              onClick={orderLega}
-              disabled={button_disabled}
-            >
-              Заказать
-            </button>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

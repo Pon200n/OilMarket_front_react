@@ -1,8 +1,7 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 
 import { Link } from "react-router-dom";
-import { UserContext } from "../userContext";
-import { BasketContext } from "../basketContext";
+
 import { deleteProductFromBasket, updateProductBasket } from "../http/orderAPI";
 import { observer } from "mobx-react";
 import { mobxContext } from "..";
@@ -10,52 +9,11 @@ import { mobxContext } from "..";
 const BasketCard = observer((props) => {
   const { order } = useContext(mobxContext);
 
-  let chengeValue = props?.chengeValue;
-  let chengeValueCount = props?.chengeValueCount;
-  let getProdFrBask = props?.getProdFrBask;
-  useEffect(() => {
-    // getProdFrBask();
-  }, []);
-
   const priceForm = new Intl.NumberFormat();
-  const [userContext, setUserContext] = useContext(UserContext);
-  const [basketContext, setBasketContext] = useContext(BasketContext);
 
   const [blur, setBlur] = useState(props?.product?.product_count);
   const [SValue, setSValue] = useState(props?.product?.product_count);
 
-  function updateCountBasket(Value) {
-    fetch(
-      "http://oilmarket1/updateCountBasket/?productID=" +
-        props?.p?.id +
-        "&count=" +
-        Value +
-        "&userID=" +
-        userContext.id,
-      {
-        method: "GET",
-        header: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => response.text())
-      .then((response) => {
-        setBasketContext(
-          JSON.parse(response, function (key, value) {
-            if (
-              key === "id" ||
-              key === "count" ||
-              key === "product_count" ||
-              key === "price" ||
-              key === "priceTotal"
-            )
-              return +value;
-            return value;
-          })
-        );
-      });
-  }
   async function updateProduct(Value) {
     await updateProductBasket(props.product.id, Value).then((response) => {
       console.log(response);
@@ -68,7 +26,6 @@ const BasketCard = observer((props) => {
     setBlur(+blur + 1);
     setSValue(Value);
 
-    // updateCountBasket(Value);
     updateProduct(Value);
   }
 
@@ -79,7 +36,6 @@ const BasketCard = observer((props) => {
       setBlur(+blur - 1);
       setSValue(Value);
 
-      // updateCountBasket(Value);
       updateProduct(Value);
     }
   }
@@ -87,13 +43,11 @@ const BasketCard = observer((props) => {
   function blurFeth(a, Value) {
     if (Value > 0) {
       setSValue(Value);
-      // updateCountBasket(Value);
       updateProduct(Value);
     } else {
       setSValue(1);
       setBlur(1);
 
-      // updateCountBasket(1);
       updateProduct(1);
     }
   }
@@ -163,11 +117,9 @@ const BasketCard = observer((props) => {
             <button
               className="button_delete"
               onClick={deleteProductFromBasketLara}
-              // onClick={props?.delFromServerBasket}
             >
               X<span id="bsCardSpanDelete">Удалить</span>
             </button>
-            <button onClick={() => console.log(props?.product)}>log</button>
           </div>
         </div>
       </div>
