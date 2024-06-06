@@ -13,6 +13,7 @@ import { logOut } from "../../http/userAPI";
 
 export const PersonalAccount = observer(() => {
   const { user } = useContext(mobxContext);
+  const { order } = useContext(mobxContext);
 
   useEffect(() => {
     setBurgerContext(false);
@@ -42,13 +43,11 @@ export const PersonalAccount = observer(() => {
   // };
 
   async function logOutLara() {
-    // await logOut()
-    //   .then((response) => response.json())
-    //   .then((response) => {
-    //     console.log(response);
-    localStorage.clear();
-    user.setUserDefault();
-    // });
+    await logOut().then(() => {
+      localStorage.clear();
+      user.setUserDefault();
+      order.setUserBasketProducts([]);
+    });
   }
 
   return (

@@ -41,8 +41,9 @@ export const login = async (name, email, password) => {
   localStorage.setItem("tokenLARA", response.data.token);
   return response;
 };
+
 export const logOut = async () => {
-  const response = await $host.post("api/logout");
+  const response = await $authHost.post("api/logout");
   localStorage.clear();
   return response;
 };

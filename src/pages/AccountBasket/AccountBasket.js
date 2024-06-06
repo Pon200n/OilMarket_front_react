@@ -1,6 +1,5 @@
 import { UserContext } from "../../userContext";
-import { BasketContext } from "../../basketContext";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import BasketCard from "../../components/BasketCard";
 import CardFooter from "../../components/CardFooter";
 import "./AccountBasket.css";
@@ -9,121 +8,12 @@ import { observer } from "mobx-react";
 
 const AccountBasket = observer(() => {
   const { order } = useContext(mobxContext);
-
-  useEffect(() => {
-    getProdFrBask();
-  }, []);
-  const [userContext, setUserContext] = useContext(UserContext);
-  const [basketContext, setBasketContext] = useContext(BasketContext);
-
-  const [items, setItems] = useState();
   const [deliveryPlace, setDeliveryPlace] = useState("");
 
+  const [userContext, setUserContext] = useContext(UserContext);
+
   //*
-  async function getProdFrBask() {
-    await fetch(
-      "http://oilmarket1/getProductsFromBasket/?userId=" + userContext.id,
-      {
-        method: "GET",
-        header: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => response.text())
-      .then((response) => {
-        // console.log(JSON.parse(response));
-        setItems(
-          JSON.parse(response, function (key, value) {
-            if (
-              key === "id" ||
-              key === "count" ||
-              key === "product_count" ||
-              key === "price" ||
-              key === "priceTotal"
-            )
-              return +value;
-            return value;
-          })
-        );
-        setBasketContext(
-          JSON.parse(response, function (key, value) {
-            if (
-              key === "id" ||
-              key === "count" ||
-              key === "product_count" ||
-              key === "price" ||
-              key === "priceTotal"
-            )
-              return +value;
-            return value;
-          })
-        );
-      });
-  }
 
-  function delFromServBasket(id) {
-    // console.log(id);
-    fetch(
-      "http://oilmarket1/delProductFromBasket/?userId=" +
-        userContext.id +
-        "&productId=" +
-        id,
-      {
-        method: "GET",
-        header: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => response.text())
-      .then((response) => {
-        // console.log(JSON.parse(response));
-        // console.log(JSON.parse(response));
-        getProdFrBask();
-      });
-  }
-
-  function increaseCount(id) {
-    console.log(id);
-  }
-
-  function chengeValueCount(id, value) {
-    console.log(id, value);
-  }
-
-  let display;
-  let item_display;
-  let button_display;
-  let basketItem;
-
-  let date = new Date();
-
-  if (items) {
-    basketItem = items.map((p) => (
-      <BasketCard
-        key={p.id}
-        p={p}
-        delFromServerBasket={() => delFromServBasket(p.id)}
-        increaseCount={() => increaseCount(p.id)}
-        //   dicr={() => dicr(p.id)}
-        chengeValueCount={chengeValueCount}
-        getProdFrBask={getProdFrBask}
-      />
-    ));
-  }
-
-  if (items) {
-    if (items[0]?.name != null) {
-      display = "none";
-      item_display = "block";
-      button_display = "flex";
-    } else {
-      display = "block";
-      item_display = "none";
-      button_display = "none";
-    }
-  }
   let button_disabled;
   let disColor;
 
@@ -192,7 +82,7 @@ const AccountBasket = observer(() => {
               />
             </label>
             {!deliveryPlace && (
-              <div style={{ color: "red", display: item_display }}>
+              <div style={{ color: "red" }}>
                 Необходимо указать место доставки
               </div>
             )}
