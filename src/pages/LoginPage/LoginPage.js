@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login, testInterceptor } from "../../http/userAPI";
+import { login } from "../../http/userAPI";
 import "./LoginPage.css";
 import { observer } from "mobx-react";
 import { mobxContext } from "../../index";
@@ -48,11 +48,6 @@ const LoginPage = observer(() => {
         }
       });
   }
-  // * установка ширины блока с контентом
-  // let footHeight = document.querySelector("footer").offsetHeight;
-  // let headHeight = document.querySelector(".main_header").offsetHeight;
-  // let docHeigth = document.documentElement.clientHeight;
-  // let minHeight = docHeigth - (footHeight + headHeight);
 
   // * валидация
   let disabled;
@@ -125,21 +120,15 @@ const LoginPage = observer(() => {
       // console.log("token", response.data.token);
       // console.log("user", response.data.user);
       // console.log("role", response.data.role);
-      console.log("basket_products", response.data.user.basket.basket_products);
+      // console.log("basket_products", response.data.user.basket.basket_products);
       user.setThisUser(response.data.user);
       user.setThisAuth(true);
       user.setThisRole(response.data.role);
       order.setUserBasketProducts(response.data.user.basket.basket_products);
+
+      user.setOrders(response.data.user.orders);
     } catch (error) {
       alert(error.message);
-    }
-  };
-  const testInt = async () => {
-    try {
-      const response = await testInterceptor();
-      console.log(response);
-    } catch (error) {
-      alert(error.response.data.message);
     }
   };
 

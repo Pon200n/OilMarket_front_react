@@ -81,30 +81,6 @@ export const Header = observer(() => {
               </li>
             </ul>
           </div>
-          <div className="item1">
-            <div className="city">
-              <Link to="/admin_panel" className="btn_top">
-                Админпанель
-              </Link>
-            </div>
-            <ul className="ul_it1">
-              <li className="li_it">
-                <Link to="/createProduct" className="btn_top">
-                  Добавить товар
-                </Link>
-              </li>
-              <li className="li_it">
-                <Link to="/add_category" className="btn_top">
-                  Добавить категорию
-                </Link>
-              </li>
-              <li className="li_it">
-                <Link to="/add_brand" className="btn_top">
-                  Добавить бренд
-                </Link>
-              </li>
-            </ul>
-          </div>
         </>
       )}
       <div className="item2">

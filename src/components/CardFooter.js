@@ -7,12 +7,13 @@ const CardFooter = observer(() => {
   const { order } = useContext(mobxContext);
 
   let totalBasketCountLara = order.user_basket_products.reduce(
-    (sum, item) => sum + item.product_count,
+    (sum, item) => sum + item?.product_count,
     0
   );
 
   let totalBasketPriceLara = order.user_basket_products.reduce(
-    (sum, item) => sum + item.products.price * item.product_count,
+    (sum, item) => sum + item?.fixed_price * item?.product_count,
+    // (sum, item) => sum + item.products.price * item.product_count,
     0
   );
   const [basketContext, setBasketContext] = useContext(BasketContext);

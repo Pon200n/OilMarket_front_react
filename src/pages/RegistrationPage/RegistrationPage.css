@@ -1,5 +1,10 @@
+
+.reg_head{
+    display: flex;
+    justify-content: center;
+}
 .form_page_form_conteiner{
-    margin: 5vw;
+    margin: 1vw;
 }
 .regError{
     display: flex;

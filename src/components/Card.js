@@ -10,11 +10,13 @@ const Card = observer((props) => {
   const priceForm = new Intl.NumberFormat();
 
   async function addProductToBasketLara() {
-    await addProductToBasket(props.item.id).then((response) => {
-      console.log("basket response", response);
-      order.setUserBasketProducts(response.data.basket.basket_products);
-      // console.log("mobx order store get", order.user_basket_products);
-    });
+    await addProductToBasket(props.item.id, props.item.price).then(
+      (response) => {
+        console.log("basket response", response);
+        order.setUserBasketProducts(response.data.basket.basket_products);
+        // console.log("mobx order store get", order.user_basket_products);
+      }
+    );
   }
 
   return (

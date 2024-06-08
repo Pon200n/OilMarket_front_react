@@ -62,8 +62,6 @@ const BasketCard = observer((props) => {
 
   return (
     <div>
-      {/* <div className="adaptBasket"></div> */}
-
       <div className="wrapper_basket_upper">
         <div className="wrapper_basket">
           <div className="basket_img">
@@ -87,7 +85,7 @@ const BasketCard = observer((props) => {
           </div>
 
           <div className="basket_price">
-            {priceForm.format(props?.product?.products?.price)} ₽
+            {priceForm.format(props?.product?.fixed_price * SValue)}₽
           </div>
 
           <div className="basket_quantity">
@@ -110,7 +108,7 @@ const BasketCard = observer((props) => {
             </div>
           </div>
           <div className="basket_sum">
-            {priceForm.format(props?.product?.products?.price * SValue)} ₽
+            {priceForm.format(props?.product?.fixed_price * SValue)}₽
           </div>
 
           <div className="basket_button_delete">
@@ -118,7 +116,7 @@ const BasketCard = observer((props) => {
               className="button_delete"
               onClick={deleteProductFromBasketLara}
             >
-              X<span id="bsCardSpanDelete">Удалить</span>
+              X <span id="bsCardSpanDelete">Удалить</span>
             </button>
           </div>
         </div>

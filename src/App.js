@@ -27,13 +27,13 @@ import BonusPage from "./pages/BonusPage/BonusPage";
 import { TestPage } from "./pages/TestPage/TestPage";
 import { PersonalAccount } from "./pages/PersonalAccount/PersonalAccount";
 import AccountBasket from "./pages/AccountBasket/AccountBasket";
-import { OrderUserPage } from "./pages/OrderUserPage/OrderUserPage.js";
+import OrderUserPage from "./pages/OrderUserPage/OrderUserPage.js";
 import { AddCategory } from "./pages/AddCategory/AddCategory.js";
 import { AddBrand } from "./pages/AddBrand/AddBrand.js";
 import { AdminPanel } from "./pages/AdminPanel/AdminPanel.js";
-import { OrderAdmin } from "./pages/OrderAdmin/OrderAdmin.js";
+import OrderAdmin from "./pages/OrderAdmin/OrderAdmin.js";
 import StatusOrderRedact from "./pages/StatusOrderRedact/StatusOrderRedact";
-import { OrdePageAdminRedact } from "./pages/OrdePageAdminRedact/OrdePageAdminRedact";
+import OrdePageAdminRedact from "./pages/OrdePageAdminRedact/OrdePageAdminRedact";
 import CharsAndValuesOfCat from "./pages/CharsAndValuesOfCat/CharsAndValuesOfCat";
 import { observer } from "mobx-react";
 import { mobxContext } from ".";
@@ -46,7 +46,11 @@ import {
 } from "./http/productAPI";
 import { setUserData } from "./http/userAPI";
 import ModalWindow from "./components/ModalWindow/ModalWindow";
-import { getStatuses, getUserProductsFromBasket } from "./http/orderAPI";
+import {
+  getOrders,
+  getStatuses,
+  getUserProductsFromBasket,
+} from "./http/orderAPI";
 
 const App = observer(() => {
   const { user } = useContext(mobxContext);
@@ -72,12 +76,12 @@ const App = observer(() => {
   const [page_CategoryPageContext, setPage_CategoryPageContext] = useState(1);
 
   useEffect(() => {
-    GetTokenFromServ();
-    getProdFrBask();
-    getCategories();
-    getBrands();
+    // GetTokenFromServ();
+    // getProdFrBask();
+    // getCategories();
+    // getBrands();
     // getStatuses();
-    getAllCharsAndValues();
+    // getAllCharsAndValues();
     // ???
     getCatsLara();
     getBrandsLARA();
@@ -86,6 +90,7 @@ const App = observer(() => {
     getCharValuesLara();
     getStatusesLara();
     getUserProductsFromBasketLara();
+    getOrdersLara();
     // getProductsLara();
   }, []);
   // *
@@ -257,8 +262,18 @@ const App = observer(() => {
   async function getUserProductsFromBasketLara() {
     try {
       await getUserProductsFromBasket().then((response) => {
-        console.log("ProductsFromBasket main", response);
+        // console.log("ProductsFromBasket main", response);
         order.setUserBasketProducts(response.data.basket.basket_products);
+      });
+    } catch (e) {
+      service.setErrorMessage(e.message);
+    }
+  }
+  async function getOrdersLara() {
+    try {
+      await getOrders().then((response) => {
+        // console.log("getOrders app", response);
+        user.setOrders(response.data);
       });
     } catch (e) {
       service.setErrorMessage(e.message);

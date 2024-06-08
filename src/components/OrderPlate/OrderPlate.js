@@ -1,43 +1,38 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { OrderCard } from "../OrderCard/OrderCard.js";
 import "./OrderPlate.css";
+import moment from "moment";
+
 export function OrderPlate(props) {
   const priceForm = new Intl.NumberFormat();
-  const [productsOrder, setProductsOrder] = useState();
   const [prodToggle, setProdToggle] = useState(true);
-  console.log(props);
-  async function getProductsOfOrderByOrderID() {
-    let res = await fetch(
-      "http://oilmarket1/getProductsOfOrderByOrderID/?order_id=" + props?.p?.id
-    );
-    let prod = await res.json();
-    // console.log(prod);
-    setProductsOrder(prod);
-  }
-  useEffect(() => {
-    getProductsOfOrderByOrderID();
-  }, []);
+
   let totalOrderPrice;
   let totalOrderCount;
-  if (productsOrder) {
-    totalOrderPrice = productsOrder.reduce(
-      (sum, item) => sum + item.price * item.product_count,
+  if (props?.order?.order_products) {
+    totalOrderPrice = props?.order?.order_products.reduce(
+      (sum, item) => sum + item.fixed_price * item.count,
       0
     );
-    totalOrderCount = productsOrder.reduce(
-      (sum, item) => sum + item.product_count,
+    totalOrderCount = props?.order?.order_products.reduce(
+      (sum, item) => sum + item.count,
       0
     );
   }
+
+  const formattedDate = moment(props?.order?.created_at).format(
+    "YYYY-MM-DD HH:mm:ss"
+  );
   return (
     <>
       <div className="ord_wrap">
+        <button onClick={() => console.log(props.order)}>ord log</button>
         <div className="ord">
           Заказ от:
-          {props?.p?.order_server_time}
+          {formattedDate}
         </div>
         <div className="ord">
-          Статус заказа: {props?.p?.order_status_description}.
+          Статус заказа: {props?.order?.status?.status_name}.
         </div>
         <div className="ord_par_price">
           На сумму: {priceForm.format(totalOrderPrice)} ₽
@@ -48,18 +43,13 @@ export function OrderPlate(props) {
         >
           Товары: {totalOrderCount} ед.
         </div>
-        {/* <button onClick={() => setProdToggle(!prodToggle)}>tog</button> */}
-        {/* {productsOrder &&
-        productsOrder.map((OrdProd) => (
-          <div key={OrdProd.id}>{OrdProd.name + " " + OrdProd.manufact}</div>
-        ))} */}
+
         {prodToggle && (
           <div>
-            {productsOrder &&
-              productsOrder.map((OrdProd) => (
-                <OrderCard key={OrdProd.id} p={OrdProd} />
+            {props?.order &&
+              props?.order?.order_products.map((OrderProduct) => (
+                <OrderCard key={OrderProduct.id} p={OrderProduct} />
               ))}
-            {/* <button onClick={getProductsOfOrderByOrderID}>get</button> */}
           </div>
         )}
       </div>

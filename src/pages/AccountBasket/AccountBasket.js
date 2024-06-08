@@ -5,8 +5,10 @@ import CardFooter from "../../components/CardFooter";
 import "./AccountBasket.css";
 import { mobxContext } from "../..";
 import { observer } from "mobx-react";
+import { addOrder } from "../../http/orderAPI";
 
 const AccountBasket = observer(() => {
+  const { user } = useContext(mobxContext);
   const { order } = useContext(mobxContext);
   const [deliveryPlace, setDeliveryPlace] = useState("");
 
@@ -38,7 +40,13 @@ const AccountBasket = observer(() => {
     let ord = await res.json();
     console.log(ord);
   }
-
+  // * lara 07.06.2024
+  async function addOrderLara() {
+    await addOrder(deliveryPlace).then((response) => {
+      console.log(response);
+      user.setOrders(response.data);
+    });
+  }
   return (
     <>
       <button onClick={() => console.log(order.user_basket_products)}>
@@ -96,7 +104,8 @@ const AccountBasket = observer(() => {
                 style={{
                   background: disColor,
                 }}
-                onClick={orderLega}
+                // onClick={orderLega}
+                onClick={addOrderLara}
                 disabled={button_disabled}
               >
                 Заказать

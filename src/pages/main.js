@@ -265,9 +265,6 @@ export const Main = observer(() => {
       await getProducts(page, perPage).then((response) => {
         product.setProducts(response?.data?.data);
         setPageCount(response.data.meta.last_page);
-        // console.log("meta", response.data.meta);
-        // console.log("prod", response?.data?.data);
-        // console.log("last_page", response.data.meta.last_page);
       });
     } catch (e) {
       service.setErrorMessage(e.message);
