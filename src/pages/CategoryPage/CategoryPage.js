@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef, useLayoutEffect } from "react";
-import { Card } from "../../components/Card";
-import { CardProductGrid } from "../../components/CardProductGrid/CardProductGrid.js";
+import CardProductGrid from "../../components/CardProductGrid/CardProductGrid.js";
 import { PaginationPanel } from "../../components/PaginationPanel/PaginationPanel";
 import { AllCharsValuesContext } from "../../context";
 import { AllCharsNamesContext } from "../../context";
@@ -12,6 +11,7 @@ import { FilterBarCategoryPage } from "../../components/FilterBarCategoryPage/Fi
 import "./CategoryPage.css";
 import { observer } from "mobx-react";
 import { mobxContext } from "../..";
+import { getProducts } from "../../http/productAPI";
 
 export const CategoryPage = observer(() => {
   const { product } = useContext(mobxContext);
@@ -26,6 +26,7 @@ export const CategoryPage = observer(() => {
   const [allCharsNamesContext, setAllCharsNamesContext] =
     useContext(AllCharsNamesContext);
   const [filtredChars, setFilterdChars] = useState([]);
+  const [filtredCharsLara, setFilterdCharsLara] = useState([]);
   const [
     filtrationValuesCategPageContext,
     setFiltrationValuesCategPageContext,
@@ -35,19 +36,19 @@ export const CategoryPage = observer(() => {
   const routCat = router?.category;
   const routBrnd = router?.brand;
 
-  function getAllCharsAndValues() {
-    fetch("http://oilmarket1/getAllCharsAndValues/index.php")
-      .then((response) => response.json())
-      .then((response) => {
-        setAllCharsNamesContext(response.chars);
-        setAllCharsValuesContext(response.values);
-        filterCharsOfCategory2(response.chars);
-      });
-  }
+  // function getAllCharsAndValues() {
+  //   fetch("http://oilmarket1/getAllCharsAndValues/index.php")
+  //     .then((response) => response.json())
+  //     .then((response) => {
+  //       setAllCharsNamesContext(response.chars);
+  //       setAllCharsValuesContext(response.values);
+  //       filterCharsOfCategory2(response.chars);
+  //     });
+  // }
 
-  if (allCharsNamesContext.length === 0) {
-    getAllCharsAndValues();
-  }
+  // if (allCharsNamesContext.length === 0) {
+  //   getAllCharsAndValues();
+  // }
 
   function filterCharsOfCategory() {
     let filt = allCharsNamesContext.filter((char) => {
@@ -57,17 +58,19 @@ export const CategoryPage = observer(() => {
     });
     setFilterdChars(filt);
   }
-  function filterCharsOfCategory2(arrCharsName) {
-    let filt = arrCharsName.filter((char) => {
+  function filterCharsLra() {
+    // console.log("product.chars", product.chars);
+    let filt = product.chars.filter((char) => {
       if (char.category_id == routCat) {
         return char;
       }
     });
-    setFilterdChars(filt);
+    setFilterdCharsLara(filt);
   }
 
   useEffect(() => {
     filterCharsOfCategory();
+    filterCharsLra();
   }, [routCat]);
 
   const [products, setProducts] = useState([]);
@@ -83,6 +86,7 @@ export const CategoryPage = observer(() => {
   const [hideFilterBarMobile, setHideFilterBarMobile] = useState(false);
   const [perPage, setPerPage] = useState(15);
 
+  const [productQuntity, setProductQuntity] = useState(0);
   function getCategoryProducts() {
     fetch(
       "http://oilmarket1/getCategoryProducts/?categoryID=" +
@@ -112,22 +116,12 @@ export const CategoryPage = observer(() => {
         let countProd = response?.countProd;
         let ArrValues2 = response?.ArrValues2;
         let FiltratedProd = response?.FiltratedProd;
-        // console.log("response", response);
-        // console.log("ArrValues2", ArrValues2);
-        // console.log("FiltratedProd", FiltratedProd);
-        // console.log(countProd);
-        // console.log(category);
-        // console.log(brand);
         setBrndName(brand);
         setProducts(products);
         setCatName(category);
         setCountProd(countProd);
       });
   }
-  console.log(
-    "filtrationValuesCategPageContext",
-    filtrationValuesCategPageContext
-  );
 
   function getProdsCatPageResourse() {
     fetch(
@@ -135,33 +129,39 @@ export const CategoryPage = observer(() => {
         routCat +
         "&manufact=" +
         routBrnd +
-        // "&page=" +
-        // page_CategoryPageContext +
-        // "&limit=" +
-        // limit +
-        // "&ArrValues=" +
-        // filtrationValuesCategPageContext +
         "&sortByPrice=" +
         sortByPrice +
         "&perPage=" +
         perPage
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-      });
+    ).then((response) => response.json());
   }
-  console.log(routBrnd);
   useEffect(() => {
     setFiltrationValuesCategPageContext([]);
   }, [
     routCat,
     // routBrnd
   ]);
+  // !
+  async function getProductsLara() {
+    await getProducts(
+      page,
+      perPage,
+      routCat,
+      // routBrnd,
+      routBrnd === "''" ? "" : routBrnd,
+      filtrationValuesCategPageContext
+    ).then((response) => {
+      console.log(response);
+      product.setProducts(response.data.data);
+      setProductQuntity(response.data.meta.total);
+    });
+  }
+  // !
 
   useEffect(() => {
     getCategoryProducts();
     getProdsCatPageResourse();
+    getProductsLara();
   }, [
     // routCat,
     routBrnd,
@@ -203,6 +203,15 @@ export const CategoryPage = observer(() => {
 
   return (
     <>
+      <h3>
+        category {router?.category} brand {router?.brand}
+      </h3>
+
+      {/* <button onClick={() => console.log(filtrationValuesCategPageContext)}>
+        filtrationValuesCategPageContext
+      </button> */}
+      {/* <button onClick={() => console.log(product.products)}>products</button> */}
+
       {/* <div className="cat_page_main_wrapper"> */}
       {hideFilterBarMobile && (
         <div className="cat_page_mobile_filter_bar_overlay_hide">
@@ -216,8 +225,21 @@ export const CategoryPage = observer(() => {
                 Фильтры Х
               </button>
 
-              {filtredChars &&
+              {/* {filtredChars &&
                 filtredChars.map((item) => (
+                  <div
+                    key={item?.id}
+                    className="cat_page_filter_bar_char_block"
+                  >
+                    <span className="cat_page_filter_bar_char_name">
+                      {item?.char_name}
+                    </span>
+                    <FilterBarCategoryPage item={item} />
+                  </div>
+                ))} */}
+
+              {filtredCharsLara &&
+                filtredCharsLara.map((item) => (
                   <div
                     key={item?.id}
                     className="cat_page_filter_bar_char_block"
@@ -236,10 +258,16 @@ export const CategoryPage = observer(() => {
         </div>
       )}
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <h2 ref={ref}>
+        {/* <h2 ref={ref}>
           {catName} {brndName} {countProd}ед.
-        </h2>
+        </h2> */}
+        <h3 ref={ref}>
+          {product.products[0] && product?.products[0]?.category?.category_name}{" "}
+          {product.products[0] && product?.products[0]?.brand?.brand_name}{" "}
+          {product.products[0] && productQuntity}ед.
+        </h3>
       </div>
+      {/* {countProd}ед. */}
 
       {/* <div className="cat_page_filter_bar">
         {filtredChars &&
@@ -296,9 +324,11 @@ export const CategoryPage = observer(() => {
                 <button onClick={() => setHideFilterBar(false)}>
                   Фильтры Х
                 </button>
-
-                {filtredChars &&
-                  filtredChars.map((item) => (
+                {/* <button onClick={() => console.log(filtredCharsLara)}>
+                  filtredCharsLara
+                </button> */}
+                {filtredCharsLara &&
+                  filtredCharsLara.map((item) => (
                     <div
                       key={item?.id}
                       className="cat_page_filter_bar_char_block"
@@ -351,8 +381,8 @@ export const CategoryPage = observer(() => {
                 ))}
               </div> */}
               <div className="grid_container12">
-                {products.length > 0 ? (
-                  products.map((product) => (
+                {product?.products?.length > 0 ? (
+                  product?.products?.map((product) => (
                     <CardProductGrid key={product.id} item={product} />
                   ))
                 ) : (

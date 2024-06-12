@@ -4,7 +4,7 @@ import { BurgerContext } from "../context";
 import { CategoryContext } from "../context";
 import { HeaderMobilePanel } from "./HeaderMobilePanel/HeaderMobilePanel.js";
 import { BurgerMenuPanel } from "./BurgerMenuPanel/BurgerMenuPanel.js";
-import { HeaderSubBrandMenu } from "./HeaderSubBrandMenu/HeaderSubBrandMenu";
+import HeaderSubBrandMenu from "./HeaderSubBrandMenu/HeaderSubBrandMenu";
 import { mobxContext } from "../index";
 import { observer } from "mobx-react";
 
@@ -188,7 +188,7 @@ export const Header = observer(() => {
           <span className="sp_cat">Каталог товаров</span>
           <img src="icon\arrow-down-black.png" alt="" className="cat_ic_2" />
           <ul className="sub_menu">
-            {categoryContext &&
+            {/* {categoryContext &&
               categoryContext.map((item) => (
                 <li key={item.id}>
                   <Link
@@ -211,12 +211,13 @@ export const Header = observer(() => {
                     </div>
                   </div>
                 </li>
-              ))}
+              ))} */}
             {product.categories &&
               product.categories.map((item) => (
                 <li key={item.id}>
                   <Link
-                    to={`/category_page/${item?.id}/none`}
+                    to={`/category_page/${item?.id}/''`}
+                    // to={`/category_page/${item?.id}/none`}
                     className="sub_m_it"
                     key={item.id}
                   >
@@ -230,6 +231,9 @@ export const Header = observer(() => {
                         <HeaderSubBrandMenu
                           key={item.id}
                           categoryID={item?.id}
+                          exist_brands={item?.exist_brands}
+                          // category_id={item?.category_id}
+                          // brand_id={item?.brand_id}
                         />
                       </div>
                     </div>
