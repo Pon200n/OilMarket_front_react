@@ -10,6 +10,7 @@ import { getProducts } from "../http/productAPI";
 import { observer } from "mobx-react";
 import { mobxContext } from "..";
 import CardProductGrid from "../components/CardProductGrid/CardProductGrid";
+import { paginationLinks } from "../functions/pagination";
 
 let counter = 1;
 
@@ -39,66 +40,76 @@ export const Main = observer(() => {
   //   pageCount = Math.ceil(countProd / limit);
   // }
   // *
-  let pages = [];
-  for (let i = 0; i < pageCount; i++) {
-    pages.push(i + 1);
-  }
+  // let pages = [];
+  // for (let i = 0; i < pageCount; i++) {
+  //   pages.push(i + 1);
+  // }
   const [active, setActive] = useState(1);
   function paginationToggle(page) {
     setPage(page);
     setActive(page);
   }
 
-  let pagesVeiwArr = [];
-  function makePagesArrView() {
-    //* let delta = Math.ceil(pageCount / 5 - 1);
-    let delta = 5;
-    let Start = active - delta;
-    if (pageCount <= 20) {
-      for (let i = 0; i < pageCount; i++) {
-        pagesVeiwArr.push(i + 1);
-      }
-    } else {
-      if (Start > 0 && active + delta <= pageCount) {
-        for (
-          let start = active - (delta + 1);
-          start < active + delta;
-          start++
-        ) {
-          pagesVeiwArr.push(start + 1);
-        }
-      } else if (active + delta > pageCount) {
-        for (let i = pageCount - (delta * 2 + 1); i < pageCount; i++) {
-          pagesVeiwArr.push(i + 1);
-        }
-      } else {
-        for (let i = 0; i < delta * 2 + 1; i++) {
-          pagesVeiwArr.push(i + 1);
-        }
-      }
-    }
-  }
+  // let pagesVeiwArr = [];
+  // function makePagesArrView() {
+  //   //* let delta = Math.ceil(pageCount / 5 - 1);
+  //   let delta = 5;
+  //   let Start = active - delta;
+  //   if (pageCount <= 20) {
+  //     for (let i = 0; i < pageCount; i++) {
+  //       pagesVeiwArr.push(i + 1);
+  //     }
+  //   } else {
+  //     if (Start > 0 && active + delta <= pageCount) {
+  //       for (
+  //         let start = active - (delta + 1);
+  //         start < active + delta;
+  //         start++
+  //       ) {
+  //         pagesVeiwArr.push(start + 1);
+  //       }
+  //     } else if (active + delta > pageCount) {
+  //       for (let i = pageCount - (delta * 2 + 1); i < pageCount; i++) {
+  //         pagesVeiwArr.push(i + 1);
+  //       }
+  //     } else {
+  //       for (let i = 0; i < delta * 2 + 1; i++) {
+  //         pagesVeiwArr.push(i + 1);
+  //       }
+  //     }
+  //   }
+  // }
+  // makePagesArrView();
   // *new pagination arr function end
-  makePagesArrView();
 
-  function add(product) {
-    let findProd = context.find((item) => item.id === product.id);
+  // ?????????????? pagination export function
+  const [pageLinksArr, setPageLinksArr] = useState([]);
 
-    if (product.id === findProd?.id) {
-      alert("Этот товар уже есть в корзине");
-    } else {
-      context.push({ ...product });
-      setContext([...context]);
-    }
+  function expPagination(pageCountRes) {
+    let pageLinks = paginationLinks(active, pageCountRes);
+    setPageLinksArr(pageLinks);
+    // console.log(pageLinks);
   }
+  // ??????????????
 
-  function sort() {
-    itemsPage = itemsPage.sort((a, b) => {
-      return (a.price - b.price) * counter;
-    });
-    counter *= -1;
-    setItems([...itemsPage]);
-  }
+  // function add(product) {
+  //   let findProd = context.find((item) => item.id === product.id);
+
+  //   if (product.id === findProd?.id) {
+  //     alert("Этот товар уже есть в корзине");
+  //   } else {
+  //     context.push({ ...product });
+  //     setContext([...context]);
+  //   }
+  // }
+
+  // function sort() {
+  //   itemsPage = itemsPage.sort((a, b) => {
+  //     return (a.price - b.price) * counter;
+  //   });
+  //   counter *= -1;
+  //   setItems([...itemsPage]);
+  // }
 
   const [toggleFilterSettings, setToggleFilterSettings] = useState(false);
 
@@ -118,32 +129,42 @@ export const Main = observer(() => {
   let category_id = "";
   let brand_id = "";
   let values = "";
+  let sortByPriceLara = "asc";
 
   async function getProductsLara() {
     try {
-      await getProducts(page, perPage, category_id, brand_id, values).then(
-        (response) => {
-          product.setProducts(response?.data?.data);
-          setPageCount(response.data.meta.last_page);
-        }
-      );
+      await getProducts(
+        page,
+        perPage,
+        category_id,
+        brand_id,
+        values,
+        sortByPriceLara
+      ).then((response) => {
+        product.setProducts(response?.data?.data);
+        setPageCount(response.data.meta.last_page);
+        expPagination(response.data.meta.last_page);
+      });
     } catch (e) {
       service.setErrorMessage(e.message);
     }
   }
+
   useEffect(() => {
     getProductsLara();
   }, [page, perPage]);
   return (
     <>
+      {/* <button onClick={expPagination}>export pagination</button> */}
+      <h3 ref={ref}> Главная</h3>
       <div id="main_wrapper">
-        <button
+        {/* <button
           ref={ref}
           onClick={() => setToggleFilterSettings(!toggleFilterSettings)}
         >
           filter settings
-        </button>
-        {toggleFilterSettings && (
+        </button> */}
+        {/* {toggleFilterSettings && (
           <div className="filterPanelMainPage">
             <div>
               <button className="c-button" onClick={sort}>
@@ -160,7 +181,7 @@ export const Main = observer(() => {
               </select>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* {product.products.length > 0 ? (
           product?.products?.map((productL) => (
@@ -182,8 +203,8 @@ export const Main = observer(() => {
       </div>
       <br />
       <div className="pagination_button_block_Pmain">
-        {pagesVeiwArr &&
-          pagesVeiwArr.map((b) => (
+        {pageLinksArr &&
+          pageLinksArr.map((b) => (
             <button
               key={b}
               onClick={() => paginationToggle(b)}

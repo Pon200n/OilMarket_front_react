@@ -12,6 +12,7 @@ import "./CategoryPage.css";
 import { observer } from "mobx-react";
 import { mobxContext } from "../..";
 import { getProducts } from "../../http/productAPI";
+import { paginationLinks } from "../../functions/pagination.js";
 
 export const CategoryPage = observer(() => {
   const { product } = useContext(mobxContext);
@@ -50,14 +51,14 @@ export const CategoryPage = observer(() => {
   //   getAllCharsAndValues();
   // }
 
-  function filterCharsOfCategory() {
-    let filt = allCharsNamesContext.filter((char) => {
-      if (char.category_id == routCat) {
-        return char;
-      }
-    });
-    setFilterdChars(filt);
-  }
+  // function filterCharsOfCategory() {
+  //   let filt = allCharsNamesContext.filter((char) => {
+  //     if (char.category_id == routCat) {
+  //       return char;
+  //     }
+  //   });
+  //   setFilterdChars(filt);
+  // }
   function filterCharsLra() {
     // console.log("product.chars", product.chars);
     let filt = product.chars.filter((char) => {
@@ -69,7 +70,7 @@ export const CategoryPage = observer(() => {
   }
 
   useEffect(() => {
-    filterCharsOfCategory();
+    // filterCharsOfCategory();
     filterCharsLra();
   }, [routCat]);
 
@@ -81,66 +82,62 @@ export const CategoryPage = observer(() => {
   const [active, setActive] = useState(1);
   const [limit, setLimit] = useState(20);
   const [countProd, setCountProd] = useState();
-  const [sortByPrice, setSortByPrice] = useState("ASC");
+  const [sortByPrice, setSortByPrice] = useState("asc");
   const [hideFilterBar, setHideFilterBar] = useState(true);
   const [hideFilterBarMobile, setHideFilterBarMobile] = useState(false);
   const [perPage, setPerPage] = useState(15);
 
   const [productQuntity, setProductQuntity] = useState(0);
-  function getCategoryProducts() {
-    fetch(
-      "http://oilmarket1/getCategoryProducts/?categoryID=" +
-        routCat +
-        "&brandID=" +
-        routBrnd +
-        "&page=" +
-        page_CategoryPageContext +
-        "&limit=" +
-        limit +
-        "&ArrValues=" +
-        filtrationValuesCategPageContext +
-        "&sortByPrice=" +
-        sortByPrice,
-      {
-        method: "GET",
-        header: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        let products = response.products;
-        let category = response.category.category_name;
-        let brand = response.brand.brand_name;
-        let countProd = response?.countProd;
-        let ArrValues2 = response?.ArrValues2;
-        let FiltratedProd = response?.FiltratedProd;
-        setBrndName(brand);
-        setProducts(products);
-        setCatName(category);
-        setCountProd(countProd);
-      });
-  }
 
-  function getProdsCatPageResourse() {
-    fetch(
-      "http://127.0.0.1:8000/getProdsCatPageResourse/?category=" +
-        routCat +
-        "&manufact=" +
-        routBrnd +
-        "&sortByPrice=" +
-        sortByPrice +
-        "&perPage=" +
-        perPage
-    ).then((response) => response.json());
-  }
-  useEffect(() => {
-    setFiltrationValuesCategPageContext([]);
-  }, [
-    routCat,
-    // routBrnd
-  ]);
+  // function getCategoryProducts() {
+  //   fetch(
+  //     "http://oilmarket1/getCategoryProducts/?categoryID=" +
+  //       routCat +
+  //       "&brandID=" +
+  //       routBrnd +
+  //       "&page=" +
+  //       page_CategoryPageContext +
+  //       "&limit=" +
+  //       limit +
+  //       "&ArrValues=" +
+  //       filtrationValuesCategPageContext +
+  //       "&sortByPrice=" +
+  //       sortByPrice,
+  //     {
+  //       method: "GET",
+  //       header: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     }
+  //   )
+  //     .then((response) => response.json())
+  //     .then((response) => {
+  //       let products = response.products;
+  //       let category = response.category.category_name;
+  //       let brand = response.brand.brand_name;
+  //       let countProd = response?.countProd;
+  //       let ArrValues2 = response?.ArrValues2;
+  //       let FiltratedProd = response?.FiltratedProd;
+  //       setBrndName(brand);
+  //       setProducts(products);
+  //       setCatName(category);
+  //       setCountProd(countProd);
+  //     });
+  // }
+
+  // function getProdsCatPageResourse() {
+  //   fetch(
+  //     "http://127.0.0.1:8000/getProdsCatPageResourse/?category=" +
+  //       routCat +
+  //       "&manufact=" +
+  //       routBrnd +
+  //       "&sortByPrice=" +
+  //       sortByPrice +
+  //       "&perPage=" +
+  //       perPage
+  //   ).then((response) => response.json());
+  // }
+
   // !
   async function getProductsLara() {
     await getProducts(
@@ -149,47 +146,70 @@ export const CategoryPage = observer(() => {
       routCat,
       // routBrnd,
       routBrnd === "''" ? "" : routBrnd,
-      filtrationValuesCategPageContext
+      filtrationValuesCategPageContext,
+      sortByPrice
     ).then((response) => {
       console.log(response);
       product.setProducts(response.data.data);
       setProductQuntity(response.data.meta.total);
+      expPagination(response.data.meta.last_page);
     });
   }
+  useEffect(() => {
+    setFiltrationValuesCategPageContext([]);
+  }, [
+    routCat,
+    // routBrnd
+  ]);
   // !
 
   useEffect(() => {
-    getCategoryProducts();
-    getProdsCatPageResourse();
     getProductsLara();
   }, [
-    // routCat,
+    routCat,
     routBrnd,
     page_CategoryPageContext,
     limit,
     filtrationValuesCategPageContext,
     sortByPrice,
     perPage,
+    page,
   ]);
 
-  let pageCount;
-  if (countProd) {
-    pageCount = Math.ceil(countProd / limit);
-  }
+  // *pagination
+  // let pageCount;
+  // if (countProd) {
+  //   pageCount = Math.ceil(countProd / limit);
+  // }
 
-  let pages = [];
-  // let pages = [0, 1, 2];
-  for (let i = 0; i < pageCount; i++) {
-    pages.push(i + 1);
-  }
-  function SetPage(p) {
-    setPage_CategoryPageContext(p);
-  }
+  // let pages = [];
+  // for (let i = 0; i < pageCount; i++) {
+  //   pages.push(i + 1);
+  // }
+
+  //* function SetPage(p) {
+  //*   setPage_CategoryPageContext(p);
+  //* }
 
   function paginationToggle(page) {
-    setPage_CategoryPageContext(page);
+    //* setPage_CategoryPageContext(page);
+    setPage(page);
     setActive(page);
   }
+
+  useEffect(() => {
+    paginationToggle(1);
+    console.log("useEffect Value change page=", page);
+  }, [filtrationValuesCategPageContext]);
+
+  const [pageLinksArr, setPageLinksArr] = useState([]);
+
+  function expPagination(pageCountRes) {
+    let pageLinks = paginationLinks(active, pageCountRes);
+    setPageLinksArr(pageLinks);
+  }
+  // *pagination
+
   let ref = useRef(null);
   useLayoutEffect(() => {
     ref.current.scrollIntoView({
@@ -199,19 +219,8 @@ export const CategoryPage = observer(() => {
     });
   }, [page_CategoryPageContext]);
 
-  // console.log(products);
-
   return (
     <>
-      <h3>
-        category {router?.category} brand {router?.brand}
-      </h3>
-
-      {/* <button onClick={() => console.log(filtrationValuesCategPageContext)}>
-        filtrationValuesCategPageContext
-      </button> */}
-      {/* <button onClick={() => console.log(product.products)}>products</button> */}
-
       {/* <div className="cat_page_main_wrapper"> */}
       {hideFilterBarMobile && (
         <div className="cat_page_mobile_filter_bar_overlay_hide">
@@ -354,8 +363,8 @@ export const CategoryPage = observer(() => {
                       name=""
                       onChange={(event) => setSortByPrice(event.target.value)}
                     >
-                      <option value="ASC">возростанию цены</option>
-                      <option value="DESC">убыванию цены</option>
+                      <option value="asc">возростанию цены</option>
+                      <option value="desc">убыванию цены</option>
                     </select>
                   </label>
                 </div>
@@ -392,8 +401,8 @@ export const CategoryPage = observer(() => {
             </div>
           </div>
           <div className="pagination_button_block_Pmain">
-            {pages &&
-              pages.map((b) => (
+            {pageLinksArr &&
+              pageLinksArr.map((b) => (
                 <button
                   key={b}
                   onClick={() => paginationToggle(b)}

@@ -347,6 +347,10 @@ const App = observer(() => {
                                     path="/category_page/:category/:brand"
                                     element={<CategoryPage />}
                                   ></Route>
+                                  {/* <Route
+                                    path="/category_page/:category/"
+                                    element={<CategoryPage />}
+                                  ></Route> */}
                                   <Route
                                     path="/bonus"
                                     element={<BonusPage />}
@@ -424,15 +428,7 @@ const App = observer(() => {
 
                                   {/* <Navigate to={"/"} replace /> */}
                                 </Routes>
-                                <button
-                                  onClick={() => {
-                                    service.setErrorMessage(
-                                      "new error message"
-                                    );
-                                  }}
-                                >
-                                  Test Error Modal
-                                </button>
+
                                 {/* <Footer></Footer> */}
                               </BrowserRouter>
                             </Page_CategoryPageContext.Provider>

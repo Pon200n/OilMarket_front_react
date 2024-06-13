@@ -1,23 +1,26 @@
 import { AllCharsValuesContext } from "../../context";
 import { FiltrationValuesCategPageContext } from "../../context";
 import { Page_CategoryPageContext } from "../../context";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import "./FilterBarCategoryPage.css";
+import { mobxContext } from "../..";
 export function FilterBarCategoryPage(props) {
+  const { product } = useContext(mobxContext);
+
   const [page_CategoryPageContext, setPage_CategoryPageContext] = useContext(
     Page_CategoryPageContext
   );
-  const [allCharsValuesContext, setAllCharsValuesContext] = useContext(
-    AllCharsValuesContext
-  );
+  // const [allCharsValuesContext, setAllCharsValuesContext] = useContext(
+  //   AllCharsValuesContext
+  // );
   const [
     filtrationValuesCategPageContext,
     setFiltrationValuesCategPageContext,
   ] = useContext(FiltrationValuesCategPageContext);
 
-  let filtredChars = allCharsValuesContext.filter((it) => {
-    return +it.char_id === +props.item.id;
-  });
+  // let filtredChars = allCharsValuesContext.filter((it) => {
+  //   return +it.char_id === +props.item.id;
+  // });
 
   function ChangeIDValuesArr(ev) {
     setPage_CategoryPageContext(1);
@@ -44,6 +47,7 @@ export function FilterBarCategoryPage(props) {
   //   "filtrationValuesCategPageContext",
   //   filtrationValuesCategPageContext
   // );
+
   // function filtrByValuesCatPage() {
   //   fetch(
   //     "http://oilmarket1/filtrByValuesCatPage/index.php" +
@@ -56,8 +60,8 @@ export function FilterBarCategoryPage(props) {
 
   return (
     <>
-      {/* <button onClick={filtrByValuesCatPage}>filtrByValuesCatPage</button> */}
-      {filtredChars.map((value) => (
+      {/* <button onClick={() => console.log(props.item.values)}>props</button> */}
+      {props.item.values.map((value) => (
         <div key={value.id} className="checkbox_FilterBarCategoryPage">
           <input
             type="checkbox"

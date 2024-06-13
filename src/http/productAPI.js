@@ -107,9 +107,27 @@ export const updateBrandLara = async (id, brand_name, brand_country) => {
 };
 
 // * Product
-export const getProducts = async (page, perPage) => {
+export const getProducts = async (
+  page,
+  perPage,
+  category_id,
+  brand_id,
+  values,
+  sortByPrice
+) => {
   const response = await $host.get(
-    "api/productPublic?page=" + page + "&perPage=" + perPage
+    "api/productPublic?page=" +
+      page +
+      "&perPage=" +
+      perPage +
+      "&category_id=" +
+      category_id +
+      "&brand_id=" +
+      brand_id +
+      "&values=" +
+      values +
+      "&sortByPrice=" +
+      sortByPrice
   );
   return response;
 };
