@@ -11,11 +11,13 @@ import { BasketContext } from "../basketContext";
 import { deleteProduct, getProduct } from "../http/productAPI";
 import { mobxContext } from "..";
 import { observer } from "mobx-react";
+import { addProductToBasket } from "../http/orderAPI";
 
 export const ProductCard = observer(() => {
   const { product } = useContext(mobxContext);
   const { user } = useContext(mobxContext);
   const { service } = useContext(mobxContext);
+  const { order } = useContext(mobxContext);
   useEffect(() => {
     // getProductByIDFromServ();
   }, []);
@@ -138,20 +140,27 @@ export const ProductCard = observer(() => {
       setItems(response.data);
     });
   }
-
-  async function del() {
-    const qvest = window.confirm("Хотите удалить карточку товара?");
-    if (qvest) {
-      try {
-        await deleteProduct(rout).then((response) => {
-          product.setProducts(response.data);
-          alert(response.status);
-        });
-      } catch (error) {
-        service.setErrorMessage(error.message);
-      }
-    }
+  async function addProductToBasketLara() {
+    await addProductToBasket(items.id, items.price).then((response) => {
+      // console.log("basket response", response);
+      order.setUserBasketProducts(response.data.basket.basket_products);
+      // console.log("mobx order store get", order.user_basket_products);
+    });
   }
+
+  // async function del() {
+  //   const qvest = window.confirm("Хотите удалить карточку товара?");
+  //   if (qvest) {
+  //     try {
+  //       await deleteProduct(rout).then((response) => {
+  //         product.setProducts(response.data);
+  //         alert(response.status);
+  //       });
+  //     } catch (error) {
+  //       service.setErrorMessage(error.message);
+  //     }
+  //   }
+  // }
   useEffect(() => {
     getProductLara();
   }, []);
@@ -162,7 +171,7 @@ export const ProductCard = observer(() => {
           <div className="cart_single">
             <div className="name_char_single">
               {items?.category?.category_name} {items?.brand?.brand_name}{" "}
-              {items?.name} {items?.SAE} {items?.volume}
+              {items?.name} {items?.volume}
             </div>
             <div className="cart_img_single">
               <img className="img_single" src={items?.image?.url} alt="" />
@@ -199,19 +208,18 @@ export const ProductCard = observer(() => {
                   </button> */}
                   </div>
                   <div className="bay_card">
-                    {user.role === "admin" && (
+                    {/* {user.role === "admin" && (
                       <button
                         onClick={del}
-                        // style={{ display: adminDisplay }}
                       >
                         Удалить товар
                       </button>
-                    )}
+                    )} */}
 
                     <br />
                     <button
                       className="bay_oneclick_card"
-                      onClick={addToBasketProduct}
+                      onClick={addProductToBasketLara}
                     >
                       Добавить в корзину
                     </button>

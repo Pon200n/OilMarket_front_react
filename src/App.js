@@ -51,6 +51,7 @@ import {
   getStatuses,
   getUserProductsFromBasket,
 } from "./http/orderAPI";
+import AdminProductPage from "./pages/AdminProductPage/AdminProductPage";
 
 const App = observer(() => {
   const { user } = useContext(mobxContext);
@@ -339,18 +340,21 @@ const App = observer(() => {
                                     path="/product/:id"
                                     element={<ProductCard />}
                                   ></Route>
+
+                                  <Route
+                                    path="/productAdmin/:id"
+                                    element={<AdminProductPage />}
+                                  ></Route>
                                   <Route
                                     path="/compare"
                                     element={<ComparePage />}
                                   ></Route>
+
                                   <Route
                                     path="/category_page/:category/:brand"
                                     element={<CategoryPage />}
                                   ></Route>
-                                  {/* <Route
-                                    path="/category_page/:category/"
-                                    element={<CategoryPage />}
-                                  ></Route> */}
+
                                   <Route
                                     path="/bonus"
                                     element={<BonusPage />}

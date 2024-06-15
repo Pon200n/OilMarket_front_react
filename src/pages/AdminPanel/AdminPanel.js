@@ -12,6 +12,11 @@ export function AdminPanel() {
               Добавить товар
             </Link>
           </div>
+          {/* <div className="btnI">
+            <Link to="/createProduct" className="btn_PA">
+              Редактировать товар
+            </Link>
+          </div> */}
           <div className="btnI">
             <Link to="/add_category" className="btn_PA">
               Категории

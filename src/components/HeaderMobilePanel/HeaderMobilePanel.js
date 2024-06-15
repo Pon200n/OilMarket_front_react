@@ -3,24 +3,33 @@ import "./HeaderMobilePanel.css";
 import { BurgerContext } from "../../context";
 import { BasketContext } from "../../basketContext";
 import { useContext, useState } from "react";
+import { observer } from "mobx-react";
+import { mobxContext } from "../..";
 
-export function HeaderMobilePanel() {
+export const HeaderMobilePanel = observer(() => {
+  const { order } = useContext(mobxContext);
+
   const [burgerContext, setBurgerContext] = useContext(BurgerContext);
   const [basketContext, setBasketContext] = useContext(BasketContext);
   const [phoneMenu, setPhoneMenu] = useState(false);
 
-  function phoneToggle() {
-    setPhoneMenu(!phoneMenu);
-  }
+  // function phoneToggle() {
+  //   setPhoneMenu(!phoneMenu);
+  // }
 
   function togleContext() {
     setBurgerContext(!burgerContext);
-    console.log("burgerContext", burgerContext);
+    // console.log("burgerContext", burgerContext);
   }
-  let totalBasketCount = basketContext.reduce(
+  // let totalBasketCount = basketContext.reduce(
+  //   (sum, item) => sum + item.product_count,
+  //   0
+  // );
+  let totalBasketCount = order.user_basket_products.reduce(
     (sum, item) => sum + item.product_count,
     0
   );
+
   let display;
   if (totalBasketCount > 0) {
     display = "inline";
@@ -78,12 +87,14 @@ export function HeaderMobilePanel() {
               alt=""
             />
           </Link>
-          <span className="headerBasketCount" style={{ display: display }}>
-            {totalBasketCount}
-          </span>
+          {totalBasketCount > 0 && (
+            <span className="headerBasketCount">{totalBasketCount}</span>
+          )}
         </div>
       </div>
       {phoneMenu && <div className="phone_menu">+7(950)-950-55-50</div>}
     </>
   );
-}
+});
+
+export default HeaderMobilePanel;

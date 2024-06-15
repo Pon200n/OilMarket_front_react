@@ -92,27 +92,6 @@ export const Main = observer(() => {
   }
   // ??????????????
 
-  // function add(product) {
-  //   let findProd = context.find((item) => item.id === product.id);
-
-  //   if (product.id === findProd?.id) {
-  //     alert("Этот товар уже есть в корзине");
-  //   } else {
-  //     context.push({ ...product });
-  //     setContext([...context]);
-  //   }
-  // }
-
-  // function sort() {
-  //   itemsPage = itemsPage.sort((a, b) => {
-  //     return (a.price - b.price) * counter;
-  //   });
-  //   counter *= -1;
-  //   setItems([...itemsPage]);
-  // }
-
-  const [toggleFilterSettings, setToggleFilterSettings] = useState(false);
-
   let ref = useRef(null);
   useLayoutEffect(() => {
     ref.current.scrollIntoView({
@@ -155,42 +134,8 @@ export const Main = observer(() => {
   }, [page, perPage]);
   return (
     <>
-      {/* <button onClick={expPagination}>export pagination</button> */}
       <h3 ref={ref}> Главная</h3>
       <div id="main_wrapper">
-        {/* <button
-          ref={ref}
-          onClick={() => setToggleFilterSettings(!toggleFilterSettings)}
-        >
-          filter settings
-        </button> */}
-        {/* {toggleFilterSettings && (
-          <div className="filterPanelMainPage">
-            <div>
-              <button className="c-button" onClick={sort}>
-                сортировать по цене
-              </button>
-              <select
-                name=""
-                id=""
-                onChange={(event) => setSortByPrice(event.target.value)}
-              >
-                <option value="none">сортировка </option>
-                <option value="ASC">сортировать по возростанию цены</option>
-                <option value="DESC">сортировать по убыванию цены</option>
-              </select>
-            </div>
-          </div>
-        )} */}
-
-        {/* {product.products.length > 0 ? (
-          product?.products?.map((productL) => (
-            <Card key={productL.id} item={productL} />
-          ))
-        ) : (
-          <h1>Нет данных</h1>
-        )} */}
-
         <div className="grid_container12">
           {product?.products?.length > 0 ? (
             product?.products?.map((product) => (

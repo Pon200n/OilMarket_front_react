@@ -1,52 +1,16 @@
 import "./CardProductGrid.css";
 import { Link } from "react-router-dom";
-import { useContext, useState } from "react";
-import { BasketContext } from "../../basketContext";
-import { UserContext } from "../../userContext";
+import { useContext } from "react";
+
 import { addProductToBasket } from "../../http/orderAPI";
 import { mobxContext } from "../..";
 
 export const CardProductGrid = (props) => {
+  const { user } = useContext(mobxContext);
   const { order } = useContext(mobxContext);
 
   const priceForm = new Intl.NumberFormat();
-  const [userContext, setUserContext] = useContext(UserContext);
-  const [basketContext, setBasketContext] = useContext(BasketContext);
 
-  // //*Добавить product в корзину на сервер
-  // function addToBasketProduct() {
-  //   fetch(
-  //     "http://oilmarket1/addProductToBasket/?productId=" +
-  //       props.item.id +
-  //       "&userId=" +
-  //       userContext.id,
-  //     {
-  //       method: "GET",
-  //       header: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     }
-  //   )
-  //     .then((response) => response.text())
-  //     .then((response) => {
-  //       console.log("с сервера", JSON.parse(response));
-
-  //       setBasketContext(
-  //         JSON.parse(response, function (key, value) {
-  //           if (
-  //             key === "id" ||
-  //             key === "count" ||
-  //             key === "product_count" ||
-  //             key === "price" ||
-  //             key === "priceTotal"
-  //           )
-  //             return +value;
-  //           return value;
-  //         })
-  //       );
-  //     });
-  //   alert("товар добавлен в корзину");
-  // }
   async function addProductToBasketLara() {
     await addProductToBasket(props.item.id, props.item.price).then(
       (response) => {
@@ -56,11 +20,17 @@ export const CardProductGrid = (props) => {
       }
     );
   }
+  let productRoute;
+  if (user?.role === "admin") {
+    productRoute = "/productAdmin/";
+  } else {
+    productRoute = "/product/";
+  }
   return (
-    // <div className="cart_mobile_540px">
     <div className="cart_grid">
       <div className="cart_img">
-        <Link to={`/product/${props?.item?.id}`}>
+        {/* <Link to={`/product/${props?.item?.id}`}> */}
+        <Link to={productRoute + props?.item?.id}>
           {" "}
           <img className="main_card_img" src={props?.item?.image?.url} alt="" />
         </Link>

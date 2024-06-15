@@ -4,10 +4,17 @@ import { BrandContext } from "../../context";
 import { CategoryContext } from "../../context";
 import { UserContext } from "../../userContext";
 import { Link } from "react-router-dom";
+import { observer } from "mobx-react";
+
 import { HeaderSubBrandMenu } from "../HeaderSubBrandMenu/HeaderSubBrandMenu";
 
 import "./BurgerMenuPanel.css";
-export function BurgerMenuPanel() {
+import { mobxContext } from "../..";
+
+const BurgerMenuPanel = observer(() => {
+  const { user } = useContext(mobxContext);
+  const { product } = useContext(mobxContext);
+
   const [burgerContext, setBurgerContext] = useContext(BurgerContext);
   const [brandContext, setBrandContext] = useContext(BrandContext);
   const [categoryContext, setCategoryContext] = useContext(CategoryContext);
@@ -45,7 +52,7 @@ export function BurgerMenuPanel() {
               </Link>
             </div>
           </div>
-          {userContext.id ? (
+          {user.isAuth === true ? (
             <div className="burger_menu_item">
               <Link
                 to="/personalAccount"
@@ -58,12 +65,12 @@ export function BurgerMenuPanel() {
           ) : (
             <></>
           )}
-          {categoryContext &&
-            categoryContext.map((item) => (
+          {product?.categories &&
+            product?.categories.map((item) => (
               <div className="burger_menu_item">
                 <Link
                   className="btn_top"
-                  to={`/category_page/${item?.id}/none`}
+                  to={`/category_page/${item?.id}/''`}
                   // className="burger_menu_item"
                   key={item.id}
                   onClick={() => setBurgerContext(false)}
@@ -76,4 +83,5 @@ export function BurgerMenuPanel() {
       </div>
     </>
   );
-}
+});
+export default BurgerMenuPanel;

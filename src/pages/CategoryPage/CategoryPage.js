@@ -13,8 +13,10 @@ import { observer } from "mobx-react";
 import { mobxContext } from "../..";
 import { getProducts } from "../../http/productAPI";
 import { paginationLinks } from "../../functions/pagination.js";
+import { reaction } from "mobx";
 
 export const CategoryPage = observer(() => {
+  const { user } = useContext(mobxContext);
   const { product } = useContext(mobxContext);
 
   // export function CategoryPage() {
@@ -37,30 +39,7 @@ export const CategoryPage = observer(() => {
   const routCat = router?.category;
   const routBrnd = router?.brand;
 
-  // function getAllCharsAndValues() {
-  //   fetch("http://oilmarket1/getAllCharsAndValues/index.php")
-  //     .then((response) => response.json())
-  //     .then((response) => {
-  //       setAllCharsNamesContext(response.chars);
-  //       setAllCharsValuesContext(response.values);
-  //       filterCharsOfCategory2(response.chars);
-  //     });
-  // }
-
-  // if (allCharsNamesContext.length === 0) {
-  //   getAllCharsAndValues();
-  // }
-
-  // function filterCharsOfCategory() {
-  //   let filt = allCharsNamesContext.filter((char) => {
-  //     if (char.category_id == routCat) {
-  //       return char;
-  //     }
-  //   });
-  //   setFilterdChars(filt);
-  // }
   function filterCharsLra() {
-    // console.log("product.chars", product.chars);
     let filt = product.chars.filter((char) => {
       if (char.category_id == routCat) {
         return char;
@@ -68,11 +47,21 @@ export const CategoryPage = observer(() => {
     });
     setFilterdCharsLara(filt);
   }
-
   useEffect(() => {
-    // filterCharsOfCategory();
     filterCharsLra();
   }, [routCat]);
+
+  useEffect(() => {
+    const disposer = reaction(
+      () => product.chars,
+      (chars) => {
+        if (chars.length > 0) {
+          filterCharsLra();
+        }
+      }
+    );
+    return () => disposer();
+  }, []);
 
   const [products, setProducts] = useState([]);
   const [catName, setCatName] = useState();
@@ -149,7 +138,7 @@ export const CategoryPage = observer(() => {
       filtrationValuesCategPageContext,
       sortByPrice
     ).then((response) => {
-      console.log(response);
+      // console.log(response);
       product.setProducts(response.data.data);
       setProductQuntity(response.data.meta.total);
       expPagination(response.data.meta.last_page);
@@ -199,7 +188,6 @@ export const CategoryPage = observer(() => {
 
   useEffect(() => {
     paginationToggle(1);
-    console.log("useEffect Value change page=", page);
   }, [filtrationValuesCategPageContext]);
 
   const [pageLinksArr, setPageLinksArr] = useState([]);
@@ -390,6 +378,7 @@ export const CategoryPage = observer(() => {
                 ))}
               </div> */}
               <div className="grid_container12">
+                {/* {user.role = 'admin'? } */}
                 {product?.products?.length > 0 ? (
                   product?.products?.map((product) => (
                     <CardProductGrid key={product.id} item={product} />
