@@ -67,10 +67,9 @@ const CreateProductForm = observer(() => {
     const formData = new FormData();
     formData.append("file", file);
     //* console.log([...formData.entries()]);
-    // formData.append("values", product.productValues);
     product.productValues.forEach((value, index) => {
       formData.append(`values[${index}][char_id]`, value.char_id);
-      formData.append(`values[${index}][value]`, value.value);
+      formData.append(`values[${index}][value_id]`, value.value_id);
     });
     formData.append("name", name);
     formData.append("price", price);

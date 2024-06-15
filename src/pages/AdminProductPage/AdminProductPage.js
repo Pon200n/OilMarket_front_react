@@ -4,6 +4,7 @@ import { useContext, useState, useEffect } from "react";
 import {
   deleteProduct,
   getProduct,
+  update,
   updateProduct,
 } from "../../http/productAPI";
 import { mobxContext } from "../..";
@@ -26,6 +27,16 @@ const AdminProductPage = observer(() => {
 
   const [item, setitem] = useState();
   const priceForm = new Intl.NumberFormat();
+
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState();
+  const [categoryName, setCategoryName] = useState("");
+  const [brand, setBrand] = useState("");
+  const [brandName, setBrandName] = useState("");
+  const [price, setPrice] = useState("");
+  const [file, setFile] = useState(0);
+  //   const [values, setValues] = useState([]);
+  const [description, setDescription] = useState("");
 
   // *** LARA 26.05.2024
   async function getProductLara() {
@@ -60,7 +71,7 @@ const AdminProductPage = observer(() => {
     let newPlain = plainArray.map((obj) => {
       return { ...obj, product_id: item.id };
     });
-    // console.log("newPlain", newPlain);
+    console.log("newPlain", newPlain);
     const values = JSON.stringify(newPlain);
     console.log("values", values);
   }
@@ -71,24 +82,54 @@ const AdminProductPage = observer(() => {
       return { ...obj, product_id: item.id };
     });
     const values = JSON.stringify(newPlain);
-    await updateProduct(item.id, values).then((response) => {
+
+    const formData = new FormData();
+    formData.append("id", item.id);
+    // formData.append("name", name);
+    // formData.append("price", price);
+    // formData.append("category_id", category);
+    // formData.append("brand_id", brand);
+    // formData.append("description", description);
+    // formData.append("values", values);
+    console.log([...formData.entries()]);
+
+    await updateProduct(item.id, formData).then((response) => {
       console.log(response);
     });
   }
+  //     await updateProduct(
+  //       item.id,
+  //       name,
+  //       price,
+  //       category,
+  //       brand,
+  //       description,
+  //       values
+  //     ).then((response) => {
+  //       console.log(response);
+  //     });
+  //   }
 
-  useEffect(() => {
-    getProductLara();
-  }, []);
-  const [name, setName] = useState("");
-  const [category, setCategory] = useState();
-  const [categoryName, setCategoryName] = useState("");
-  const [brand, setBrand] = useState("");
-  const [brandName, setBrandName] = useState("");
-  const [price, setPrice] = useState("");
-  const [file, setFile] = useState(0);
-  const [values, setValues] = useState([]);
-  const [description, setDescription] = useState("");
+  //   !
+  async function up() {
+    const plainArray = toJS(product.productValues);
+    let newPlain = plainArray.map((obj) => {
+      return { ...obj, product_id: item.id };
+    });
+    const values = JSON.stringify(newPlain);
 
+    const formData = new FormData();
+    formData.append("id", item.id);
+    formData.append("name", name);
+    formData.append("price", price);
+    formData.append("category_id", category);
+    formData.append("brand_id", brand);
+    formData.append("description", description);
+    formData.append("values", values);
+    formData.append("file", file);
+    await update(formData).then((res) => console.log(res));
+  }
+  //   !
   let filtratedChars;
   if (product.categories) {
     filtratedChars = product.chars.filter((char) => {
@@ -97,6 +138,15 @@ const AdminProductPage = observer(() => {
       }
     });
   }
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+  useEffect(() => {
+    product.setProductValues([]);
+  }, [category]);
+  useEffect(() => {
+    getProductLara();
+  }, []);
   return (
     <>
       <div className="card_center" style={{ backgroundColor: "grey" }}>
@@ -110,6 +160,7 @@ const AdminProductPage = observer(() => {
                 className="input_form"
                 type="text"
                 value={name}
+                // defaultValue={item.name}
                 onChange={(event) => setName(event.target.value)}
               />
             </label>
@@ -201,12 +252,16 @@ const AdminProductPage = observer(() => {
                   <label>
                     {char?.char_name} {char?.id}
                   </label>
-                  <ValueSelectBarLara v={values} char={char} />
+                  <ValueSelectBarLara char={char} />
                 </div>
               ))}
             <br />
+            <input type="file" name="file" onChange={handleFileChange} />
             <button className="form_input_button" onClick={updateProductLara}>
               Обновить
+            </button>
+            <button className="form_input_button" onClick={up}>
+              up
             </button>
           </div>
         </div>
@@ -295,6 +350,7 @@ const AdminProductPage = observer(() => {
             <button onClick={toJsonValues}>
               <h3>toJsonValues</h3>
             </button>
+
             {charTableToggle && <Table charsLara={item.values} />}
           </div>
         ) : (

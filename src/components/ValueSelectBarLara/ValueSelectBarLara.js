@@ -43,12 +43,12 @@ export const ValueSelectBarLara = observer((props) => {
 
   let f;
   function checkChange(ev) {
-    f = product.productValues.find((item) => item.value == ev.target.value);
+    f = product.productValues.find((item) => item.value_id == ev.target.value);
 
     if (!f) {
       product.setProductValues([
         ...product.productValues,
-        { value: `${+ev.target.value}`, char_id: `${+char_id}` },
+        { value_id: `${+ev.target.value}`, char_id: `${+char_id}` },
       ]);
     } else {
       let del = product.productValues.filter((item) => item != f);
@@ -84,7 +84,7 @@ export const ValueSelectBarLara = observer((props) => {
               value={value.id}
               key={value.id}
               checked={product.productValues.find(
-                (item) => item.value == value.id
+                (item) => item.value_id == value.id
               )}
               onChange={(event) => checkChange(event)}
             />
