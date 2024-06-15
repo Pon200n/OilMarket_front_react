@@ -4,6 +4,7 @@ import { useContext } from "react";
 
 import { addProductToBasket } from "../../http/orderAPI";
 import { mobxContext } from "../..";
+import { addProductToFavorites } from "../../http/productAPI";
 
 export const CardProductGrid = (props) => {
   const { user } = useContext(mobxContext);
@@ -25,6 +26,11 @@ export const CardProductGrid = (props) => {
     productRoute = "/productAdmin/";
   } else {
     productRoute = "/product/";
+  }
+  async function addToFavorites() {
+    await addProductToFavorites(props.item.id).then((response) =>
+      console.log(response)
+    );
   }
   return (
     <div className="cart_grid">
@@ -51,6 +57,7 @@ export const CardProductGrid = (props) => {
               src={"/icon/add-to-favorites--v1.png"}
               alt=""
               className="img_cr_fav"
+              onClick={addToFavorites}
             />
           </div>
         </div>

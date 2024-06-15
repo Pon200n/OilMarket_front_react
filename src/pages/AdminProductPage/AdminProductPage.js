@@ -4,7 +4,6 @@ import { useContext, useState, useEffect } from "react";
 import {
   deleteProduct,
   getProduct,
-  update,
   updateProduct,
 } from "../../http/productAPI";
 import { mobxContext } from "../..";
@@ -65,53 +64,7 @@ const AdminProductPage = observer(() => {
     }
   }
 
-  function toJsonValues() {
-    const plainArray = toJS(product.productValues);
-    console.log("plainArray", plainArray);
-    let newPlain = plainArray.map((obj) => {
-      return { ...obj, product_id: item.id };
-    });
-    console.log("newPlain", newPlain);
-    const values = JSON.stringify(newPlain);
-    console.log("values", values);
-  }
-
   async function updateProductLara() {
-    const plainArray = toJS(product.productValues);
-    let newPlain = plainArray.map((obj) => {
-      return { ...obj, product_id: item.id };
-    });
-    const values = JSON.stringify(newPlain);
-
-    const formData = new FormData();
-    formData.append("id", item.id);
-    // formData.append("name", name);
-    // formData.append("price", price);
-    // formData.append("category_id", category);
-    // formData.append("brand_id", brand);
-    // formData.append("description", description);
-    // formData.append("values", values);
-    console.log([...formData.entries()]);
-
-    await updateProduct(item.id, formData).then((response) => {
-      console.log(response);
-    });
-  }
-  //     await updateProduct(
-  //       item.id,
-  //       name,
-  //       price,
-  //       category,
-  //       brand,
-  //       description,
-  //       values
-  //     ).then((response) => {
-  //       console.log(response);
-  //     });
-  //   }
-
-  //   !
-  async function up() {
     const plainArray = toJS(product.productValues);
     let newPlain = plainArray.map((obj) => {
       return { ...obj, product_id: item.id };
@@ -127,9 +80,8 @@ const AdminProductPage = observer(() => {
     formData.append("description", description);
     formData.append("values", values);
     formData.append("file", file);
-    await update(formData).then((res) => console.log(res));
+    await updateProduct(formData).then((res) => console.log(res));
   }
-  //   !
   let filtratedChars;
   if (product.categories) {
     filtratedChars = product.chars.filter((char) => {
@@ -260,9 +212,6 @@ const AdminProductPage = observer(() => {
             <button className="form_input_button" onClick={updateProductLara}>
               Обновить
             </button>
-            <button className="form_input_button" onClick={up}>
-              up
-            </button>
           </div>
         </div>
         {item ? (
@@ -341,15 +290,6 @@ const AdminProductPage = observer(() => {
                 </p>
               </div>
             )}
-            <button onClick={() => console.log(item.values)}>
-              <h3>item.values</h3>
-            </button>
-            <button onClick={() => console.log(product.productValues)}>
-              <h3>productValues</h3>
-            </button>
-            <button onClick={toJsonValues}>
-              <h3>toJsonValues</h3>
-            </button>
 
             {charTableToggle && <Table charsLara={item.values} />}
           </div>

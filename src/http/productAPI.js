@@ -144,47 +144,6 @@ export const deleteProduct = async (id) => {
   return response;
 };
 
-// export const updateProduct = async (
-//   id,
-//   name,
-//   price,
-//   category_id,
-//   brand_id,
-//   description,
-//   values
-// ) => {
-//   const response = await $authHost.patch(
-//     "api/productAdmin/" +
-//       id +
-//       "?name=" +
-//       name +
-//       "&price=" +
-//       price +
-//       "&category_id=" +
-//       category_id +
-//       "&brand_id=" +
-//       brand_id +
-//       "&description=" +
-//       description +
-//       "&values=" +
-//       values
-//   );
-//   return response;
-// };
-
-export const updateProduct = async (id, formData) => {
-  const response = await $authHost.patch(
-    "api/productAdmin/" + id,
-    formData
-    // , {
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    // }
-  );
-  return response;
-};
-
 export const addProduct = async (data) => {
   const response = await $authHost.post("api/productAdmin", data, {
     headers: {
@@ -194,12 +153,16 @@ export const addProduct = async (data) => {
   return response;
 };
 
-// !
-export const update = async (formData) => {
+export const updateProduct = async (formData) => {
   const response = await $authHost.post("api/updateProduct", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
+  return response;
+};
+
+export const addProductToFavorites = async (product_id) => {
+  const response = await $authHost.post("api/favorites", { product_id });
   return response;
 };
