@@ -1,10 +1,16 @@
 import { useParams } from "react-router-dom";
 import { Table } from "../../components/CharTable/CharTable";
 import { useContext, useState, useEffect } from "react";
-import { deleteProduct, getProduct } from "../../http/productAPI";
+import {
+  deleteProduct,
+  getProduct,
+  updateProduct,
+} from "../../http/productAPI";
 import { mobxContext } from "../..";
 import { observer } from "mobx-react";
 import { addProductToBasket } from "../../http/orderAPI";
+import ValueSelectBarLara from "../../components/ValueSelectBarLara/ValueSelectBarLara";
+import { toJS } from "mobx";
 
 const AdminProductPage = observer(() => {
   const { product } = useContext(mobxContext);
@@ -47,6 +53,29 @@ const AdminProductPage = observer(() => {
       }
     }
   }
+
+  function toJsonValues() {
+    const plainArray = toJS(product.productValues);
+    console.log("plainArray", plainArray);
+    let newPlain = plainArray.map((obj) => {
+      return { ...obj, product_id: item.id };
+    });
+    // console.log("newPlain", newPlain);
+    const values = JSON.stringify(newPlain);
+    console.log("values", values);
+  }
+
+  async function updateProductLara() {
+    const plainArray = toJS(product.productValues);
+    let newPlain = plainArray.map((obj) => {
+      return { ...obj, product_id: item.id };
+    });
+    const values = JSON.stringify(newPlain);
+    await updateProduct(item.id, values).then((response) => {
+      console.log(response);
+    });
+  }
+
   useEffect(() => {
     getProductLara();
   }, []);
@@ -59,6 +88,15 @@ const AdminProductPage = observer(() => {
   const [file, setFile] = useState(0);
   const [values, setValues] = useState([]);
   const [description, setDescription] = useState("");
+
+  let filtratedChars;
+  if (product.categories) {
+    filtratedChars = product.chars.filter((char) => {
+      if (char?.category_id === +category) {
+        return char;
+      }
+    });
+  }
   return (
     <>
       <div className="card_center" style={{ backgroundColor: "grey" }}>
@@ -157,6 +195,19 @@ const AdminProductPage = observer(() => {
               />
             </label>
             <br />
+            {filtratedChars &&
+              filtratedChars.map((char) => (
+                <div style={{ margin: "10px" }} key={char?.id}>
+                  <label>
+                    {char?.char_name} {char?.id}
+                  </label>
+                  <ValueSelectBarLara v={values} char={char} />
+                </div>
+              ))}
+            <br />
+            <button className="form_input_button" onClick={updateProductLara}>
+              Обновить
+            </button>
           </div>
         </div>
         {item ? (
@@ -235,6 +286,15 @@ const AdminProductPage = observer(() => {
                 </p>
               </div>
             )}
+            <button onClick={() => console.log(item.values)}>
+              <h3>item.values</h3>
+            </button>
+            <button onClick={() => console.log(product.productValues)}>
+              <h3>productValues</h3>
+            </button>
+            <button onClick={toJsonValues}>
+              <h3>toJsonValues</h3>
+            </button>
             {charTableToggle && <Table charsLara={item.values} />}
           </div>
         ) : (

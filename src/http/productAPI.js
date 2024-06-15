@@ -1,3 +1,5 @@
+import { values } from "mobx";
+
 import { $authHost, $host } from "./index";
 // * Categories
 export const getCategoriesLara = async () => {
@@ -148,5 +150,20 @@ export const addProduct = async (data) => {
 
 export const deleteProduct = async (id) => {
   const response = await $authHost.delete("api/productAdmin/" + id);
+  return response;
+};
+
+export const updateProduct = async (
+  id,
+  // name,
+  // price,
+  // category_id,
+  // brand_id,
+  // description,
+  values
+) => {
+  const response = await $authHost.patch(
+    "api/productAdmin/" + id + "?values=" + values
+  );
   return response;
 };
