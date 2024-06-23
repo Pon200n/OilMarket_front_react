@@ -24,7 +24,7 @@ import CreateProductForm from "./pages/CreateProductForm/CreateProductForm";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import BonusPage from "./pages/BonusPage/BonusPage";
-import { TestPage } from "./pages/TestPage/TestPage";
+import { FavoritesPage } from "./pages/FavoritesPage/FavoritesPage";
 import { PersonalAccount } from "./pages/PersonalAccount/PersonalAccount";
 import AccountBasket from "./pages/AccountBasket/AccountBasket";
 import OrderUserPage from "./pages/OrderUserPage/OrderUserPage.js";
@@ -41,6 +41,7 @@ import {
   getBrandsLara,
   getCategoriesLara,
   getCharsLara,
+  getFavoriteProducts,
   getProducts,
   getValuesLara,
 } from "./http/productAPI";
@@ -90,10 +91,21 @@ const App = observer(() => {
     getCatCharsLara();
     getCharValuesLara();
     getStatusesLara();
+    // getUserProductsFromBasketLara();
+    // getOrdersLara();
+    // getUserFavoriteProducts();
+
+    //? getProductsLara();
+  }, []);
+
+  if (user.isAuth) {
+    // console.log(user.isAuth);
+    // alert(user.isAuth);
+    //? setUserDataLara();
+    getUserFavoriteProducts();
     getUserProductsFromBasketLara();
     getOrdersLara();
-    // getProductsLara();
-  }, []);
+  }
   // *
   async function GetTokenFromServ() {
     const token = localStorage.getItem("token"); // Или ваш ключ хранения токена
@@ -245,7 +257,7 @@ const App = observer(() => {
         user.setThisAuth(true);
       });
     } catch (e) {
-      service.setErrorMessage(e.message);
+      //? service.setErrorMessage(e.message);
     }
   }
 
@@ -265,6 +277,16 @@ const App = observer(() => {
       await getUserProductsFromBasket().then((response) => {
         // console.log("ProductsFromBasket main", response);
         order.setUserBasketProducts(response.data.basket.basket_products);
+      });
+    } catch (e) {
+      service.setErrorMessage(e.message);
+    }
+  }
+  async function getUserFavoriteProducts() {
+    try {
+      await getFavoriteProducts().then((response) => {
+        // console.log("ProductsFromBasket main", response);
+        user.setFavoriteProducts(response?.data?.favorite?.favorite_products);
       });
     } catch (e) {
       service.setErrorMessage(e.message);
@@ -378,8 +400,8 @@ const App = observer(() => {
                                   ></Route>
 
                                   <Route
-                                    path="/test"
-                                    element={<TestPage />}
+                                    path="/favorites"
+                                    element={<FavoritesPage />}
                                   ></Route>
                                   <Route
                                     path="/order_user"

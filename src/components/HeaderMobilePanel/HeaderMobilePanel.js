@@ -8,6 +8,7 @@ import { mobxContext } from "../..";
 
 export const HeaderMobilePanel = observer(() => {
   const { order } = useContext(mobxContext);
+  const { user } = useContext(mobxContext);
 
   const [burgerContext, setBurgerContext] = useContext(BurgerContext);
   const [basketContext, setBasketContext] = useContext(BasketContext);
@@ -59,7 +60,7 @@ export const HeaderMobilePanel = observer(() => {
           </div>
         </div>
         <div className="mobile_header_btn">
-          <Link to="/" className="mobile_btn">
+          <Link to="/favorites" className="mobile_btn">
             <img
               src="icon\icons8_WHITE_STAR.png"
               width="40px"
@@ -67,6 +68,11 @@ export const HeaderMobilePanel = observer(() => {
               alt=""
             />
           </Link>
+          {user.favoriteProducts.length > 0 && (
+            <span className="headerBasketCount">
+              {user.favoriteProducts.length}
+            </span>
+          )}
         </div>
         <div className="mobile_header_btn">
           <Link to="/" className="mobile_btn">

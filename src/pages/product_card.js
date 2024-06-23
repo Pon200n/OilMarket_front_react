@@ -8,7 +8,11 @@ import { useContext, useState, useEffect } from "react";
 import { Context } from "../context";
 import { UserContext } from "../userContext";
 import { BasketContext } from "../basketContext";
-import { deleteProduct, getProduct } from "../http/productAPI";
+import {
+  addProductToFavorites,
+  deleteProduct,
+  getProduct,
+} from "../http/productAPI";
 import { mobxContext } from "..";
 import { observer } from "mobx-react";
 import { addProductToBasket } from "../http/orderAPI";
@@ -147,7 +151,12 @@ export const ProductCard = observer(() => {
       // console.log("mobx order store get", order.user_basket_products);
     });
   }
-
+  async function addToFavorites() {
+    await addProductToFavorites(items.id).then((response) => {
+      console.log(response.data.favorite.favorite_products);
+      user.setFavoriteProducts(response.data.favorite.favorite_products);
+    });
+  }
   // async function del() {
   //   const qvest = window.confirm("Хотите удалить карточку товара?");
   //   if (qvest) {
@@ -180,7 +189,8 @@ export const ProductCard = observer(() => {
                   <div className="price_card">
                     {priceForm.format(items?.price)} ₽
                   </div>
-                  <div className="fav">
+
+                  <div className="fav " onClick={addToFavorites}>
                     <a href="#" className="btn_2_card">
                       <img
                         src="/icon/free-icon-star-126482.png"

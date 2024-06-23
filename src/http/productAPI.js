@@ -162,7 +162,17 @@ export const updateProduct = async (formData) => {
   return response;
 };
 
+export const getFavoriteProducts = async () => {
+  const response = await $authHost.get("api/favorites");
+  return response;
+};
+
 export const addProductToFavorites = async (product_id) => {
   const response = await $authHost.post("api/favorites", { product_id });
+  return response;
+};
+
+export const deleteProductFromFavorites = async (id) => {
+  const response = await $authHost.delete("api/favorites/" + id);
   return response;
 };

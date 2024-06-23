@@ -29,6 +29,9 @@ export const Header = observer(() => {
 
   return (
     <div className="main_header">
+      <button onClick={() => console.log(user.favoriteProducts)}>
+        favoriteProducts
+      </button>
       <div className="reg_wrapper">
         <div className="reg">
           {user.isAuth ? (
@@ -141,7 +144,7 @@ export const Header = observer(() => {
 
         <div className="block_btn_2">
           <div className="fav">
-            <Link to="/test" className="btn_2">
+            <Link to="/favorites" className="btn_2">
               <img
                 src="icon\free-icon-star-126482.png"
                 width="20px"
@@ -151,6 +154,11 @@ export const Header = observer(() => {
 
               <span className="icon_iside">Избранное</span>
             </Link>
+            {user.favoriteProducts.length > 0 && (
+              <span className="headerBasketCount">
+                {user.favoriteProducts.length}
+              </span>
+            )}
           </div>
           <div className="comp">
             <Link to="/compare" className="btn_2">

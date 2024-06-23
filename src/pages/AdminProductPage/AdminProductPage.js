@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { Table } from "../../components/CharTable/CharTable";
 import { useContext, useState, useEffect } from "react";
 import {
+  addProductToFavorites,
   deleteProduct,
   getProduct,
   updateProduct,
@@ -38,6 +39,14 @@ const AdminProductPage = observer(() => {
   const [description, setDescription] = useState("");
 
   // *** LARA 26.05.2024
+
+  async function addToFavorites() {
+    await addProductToFavorites(item.id).then((response) => {
+      // console.log(response)
+      user.setFavoriteProducts(response.data.favorite.favorite_products);
+    });
+  }
+
   async function getProductLara() {
     await getProduct(rout).then((response) => {
       setitem(response.data);
@@ -230,7 +239,7 @@ const AdminProductPage = observer(() => {
                   <div className="price_card">
                     {price == "" ? priceForm.format(item?.price) : price} ₽
                   </div>
-                  <div className="fav">
+                  <div className="fav" onClick={addToFavorites}>
                     <a href="#" className="btn_2_card">
                       <img
                         src="/icon/free-icon-star-126482.png"

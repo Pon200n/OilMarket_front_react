@@ -1,0 +1,7 @@
+.favoritePageTitle{
+    display: flex;
+    justify-content: center;
+    color: rgb(99, 99, 99);
+    font-family: cursive;
+    /* font-style: italic; */
+}

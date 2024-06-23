@@ -4,7 +4,9 @@ import "./RegistrationPage.css";
 import { observer } from "mobx-react";
 import { mobxContext } from "../..";
 import { registration } from "../../http/userAPI";
-
+import { useTranslation } from "react-i18next";
+import { formatMessage } from "../../i18n.js";
+import i18next from "i18next";
 export const RegistrationPage = observer(() => {
   const { service } = useContext(mobxContext);
 
@@ -65,6 +67,8 @@ export const RegistrationPage = observer(() => {
   let password = useRef();
   let password_confirmation = useRef();
 
+  const { t } = useTranslation();
+
   async function registrationLara() {
     try {
       await registration(
@@ -76,15 +80,50 @@ export const RegistrationPage = observer(() => {
         password.current.value,
         password_confirmation.current.value
       ).then((response) => {
-        console.log(response);
+        // console.log(response);
       });
     } catch (e) {
-      service.setErrorMessage(e.message);
+      //* console.log(e?.request?.response);
+      //* console.log(e?.response?.data?.message);
+      //* service.setErrorMessage(e.message);
+
+      if (e.response && e.response.status === 422) {
+        // const errorMessage = t(e.response.data.message);
+        const errorMessage = translate(e.response.data.message);
+        // console.log(e?.response?.data);
+        // console.log(errorMessage);
+
+        service.setErrorMessage(errorMessage);
+      } else {
+        service.setErrorMessage(e.message);
+      }
     }
   }
+
+  let value = "The name field is required. (and 3 more errors)";
+  const parts = value.split(".");
+  console.log(parts);
+  const emailTakenPart = parts.find((part) => {
+    return (
+      part.includes("The email has already been taken") ||
+      part.includes("The name field is required")
+    );
+  });
+  console.log("emailTakenPart", emailTakenPart + ".");
+
+  const translate = (value) => {
+    const formattedMessage = formatMessage(value);
+
+    return i18next.t(formattedMessage);
+  };
+
+  console.log("try", translate(value));
   return (
     <>
       <div className="form_page_form_conteiner">
+        <button onClick={() => console.log("try", translate(value))}>
+          try
+        </button>
         {/* <div>
           <label>
             Login:

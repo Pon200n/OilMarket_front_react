@@ -134,7 +134,10 @@ export const Main = observer(() => {
   }, [page, perPage]);
   return (
     <>
-      <h3 ref={ref}> Главная</h3>
+      <h2 className="favoritePageTitle" ref={ref}>
+        {" "}
+        Главная
+      </h2>
       <div id="main_wrapper">
         <div className="grid_container12">
           {product?.products?.length > 0 ? (

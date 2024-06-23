@@ -8,6 +8,7 @@ import UserStore from "./MobxStore/UserStore";
 import ProductStore from "./MobxStore/ProductStore";
 import ServiceStore from "./MobxStore/ServiceStore";
 import OrderStore from "./MobxStore/OrderStore";
+import "./i18n";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

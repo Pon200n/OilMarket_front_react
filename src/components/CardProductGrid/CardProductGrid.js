@@ -28,9 +28,10 @@ export const CardProductGrid = (props) => {
     productRoute = "/product/";
   }
   async function addToFavorites() {
-    await addProductToFavorites(props.item.id).then((response) =>
-      console.log(response)
-    );
+    await addProductToFavorites(props.item.id).then((response) => {
+      // console.log(response)
+      user.setFavoriteProducts(response.data.favorite.favorite_products);
+    });
   }
   return (
     <div className="cart_grid">
