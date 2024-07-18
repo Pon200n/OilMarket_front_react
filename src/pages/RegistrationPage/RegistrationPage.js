@@ -69,6 +69,11 @@ export const RegistrationPage = observer(() => {
 
   const { t } = useTranslation();
 
+  const translate = (value) => {
+    const formattedMessage = formatMessage(value);
+    return i18next.t(formattedMessage);
+  };
+
   async function registrationLara() {
     try {
       await registration(
@@ -80,7 +85,7 @@ export const RegistrationPage = observer(() => {
         password.current.value,
         password_confirmation.current.value
       ).then((response) => {
-        // console.log(response);
+        console.log(response);
       });
     } catch (e) {
       //* console.log(e?.request?.response);
@@ -100,30 +105,9 @@ export const RegistrationPage = observer(() => {
     }
   }
 
-  let value = "The name field is required. (and 3 more errors)";
-  const parts = value.split(".");
-  console.log(parts);
-  const emailTakenPart = parts.find((part) => {
-    return (
-      part.includes("The email has already been taken") ||
-      part.includes("The name field is required")
-    );
-  });
-  console.log("emailTakenPart", emailTakenPart + ".");
-
-  const translate = (value) => {
-    const formattedMessage = formatMessage(value);
-
-    return i18next.t(formattedMessage);
-  };
-
-  console.log("try", translate(value));
   return (
     <>
       <div className="form_page_form_conteiner">
-        <button onClick={() => console.log("try", translate(value))}>
-          try
-        </button>
         {/* <div>
           <label>
             Login:

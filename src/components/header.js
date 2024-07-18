@@ -29,9 +29,6 @@ export const Header = observer(() => {
 
   return (
     <div className="main_header">
-      <button onClick={() => console.log(user.favoriteProducts)}>
-        favoriteProducts
-      </button>
       <div className="reg_wrapper">
         <div className="reg">
           {user.isAuth ? (

@@ -49,10 +49,6 @@ const AccountBasket = observer(() => {
   }
   return (
     <>
-      <button onClick={() => console.log(order.user_basket_products)}>
-        basket log
-      </button>
-
       <div className="content_wrapper">
         {order.user_basket_products.length > 0 && (
           <div className="ABasket_head">
