@@ -9,9 +9,6 @@ export const FavoritesPage = observer(() => {
   const { user } = useContext(mobxContext);
   return (
     <div>
-      <button onClick={() => console.log(user.favoriteProducts.length)}>
-        favoriteProducts
-      </button>
       <h2 className="favoritePageTitle">Избранное</h2>
       {user.favoriteProducts.map((product) => (
         <FavoriteCard product={product} key={product.id} />
