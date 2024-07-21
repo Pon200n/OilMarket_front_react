@@ -94,17 +94,6 @@ export const Header = observer(() => {
               height="40px"
               alt=""
             />
-
-            {hidePhoneNumber && (
-              <div className="it_block_1">
-                <div className="tel_1">8 800-600-01-01</div>
-                <div className="tel_str1">ИНТЕРНЕТ-МАГАЗИН</div>
-                <div className="tel_2">+7 (3843) 34-80-30</div>
-                <a href="#" className="tel_str2">
-                  ЗАКАЗАТЬ ЗВОНОК
-                </a>
-              </div>
-            )}
           </div>
 
           <div className="social">
@@ -185,6 +174,21 @@ export const Header = observer(() => {
           </div>
         </div>
       </div>
+      {hidePhoneNumber && (
+        <div>
+          {/* <div className="it_block_1"> */}
+          {/* <div className="tel_1">8 800-600-01-01</div> */}
+          {/* <div className="tel_str1">ИНТЕРНЕТ-МАГАЗИН</div> */}
+          <div className="phone_menu">
+            <span className="phone_menu_number">+7 (3843) 34-80-30</span>
+          </div>
+          {/* <div className="tel_2">+7 (3843) 34-80-30</div> */}
+          {/* <a href="#" className="tel_str2">
+              ЗАКАЗАТЬ ЗВОНОК
+            </a> */}
+          {/* </div> */}
+        </div>
+      )}
 
       <div className="item3">
         <div className="catalog">

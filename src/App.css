@@ -125,7 +125,10 @@
 
 
 }
-
+.phone_menu_number{
+  /* font-size: clamp(0.7rem, 2vw, 1.2rem); */
+  font-size: 1.2rem;
+}
 .phone_block {
   display: flex;
   align-items: center;
@@ -140,7 +143,7 @@
 
 }
 .it_block_1 {
-  position: absolute;
+  /* position: absolute; */
   top: 5px;
   left: 100px;
   border-style: solid;
