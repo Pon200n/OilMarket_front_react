@@ -23,7 +23,7 @@ export const CardProductGrid = (props) => {
       );
     } else {
       alert(
-        "Пользоваться корзиной и избранным могут авторизованные пользователи, пожалуйста зарегистрируйтесь и войдите в аккаунт."
+        "Пользоваться корзиной могут авторизованные пользователи, пожалуйста зарегистрируйтесь и войдите в аккаунт."
       );
     }
   }
@@ -34,10 +34,16 @@ export const CardProductGrid = (props) => {
     productRoute = "/product/";
   }
   async function addToFavorites() {
-    await addProductToFavorites(props.item.id).then((response) => {
-      // console.log(response)
-      user.setFavoriteProducts(response.data.favorite.favorite_products);
-    });
+    if (user.isAuth) {
+      await addProductToFavorites(props.item.id).then((response) => {
+        // console.log(response)
+        user.setFavoriteProducts(response.data.favorite.favorite_products);
+      });
+    } else {
+      alert(
+        "Пользоваться 'избранным' могут авторизованные пользователи, пожалуйста зарегистрируйтесь и войдите в аккаунт."
+      );
+    }
   }
   return (
     <div className="cart_grid">
