@@ -88,7 +88,7 @@ export const Header = observer(() => {
           <div className="phone_block">
             <img
               onClick={() => setHidePhoneNumber(!hidePhoneNumber)}
-              src="icon\png-clipart-iphone-telephone-logo-smartphone-iphone-electronics-text.png"
+              src="/icon/png-clipart-iphone-telephone-logo-smartphone-iphone-electronics-text.png"
               className="phone_ic"
               width="40px"
               height="40px"
@@ -143,7 +143,7 @@ export const Header = observer(() => {
           <div className="fav">
             <Link to="/favorites" className="btn_2">
               <img
-                src="icon\free-icon-star-126482.png"
+                src="/icon/free-icon-star-126482.png"
                 width="20px"
                 height="20px"
                 alt=""
@@ -160,7 +160,7 @@ export const Header = observer(() => {
           <div className="comp">
             <Link to="/compare" className="btn_2">
               <img
-                src="icon\business-and-finance.png"
+                src="/icon/business-and-finance.png"
                 width="20px"
                 height="20px"
                 alt=""
@@ -171,7 +171,7 @@ export const Header = observer(() => {
           <div className="basket">
             <Link to="/account_basket" className="btn_2">
               <img
-                src="icon\free-icon-shopping-cart-481384.png"
+                src="/icon/free-icon-shopping-cart-481384.png"
                 width="20px"
                 height="20px"
                 alt=""
@@ -188,10 +188,14 @@ export const Header = observer(() => {
 
       <div className="item3">
         <div className="catalog">
-          <img src="icon\hamburger-menu-grey.png" alt="" className="cat_ic_1" />
+          <img
+            src="/icon/hamburger-menu-grey.png"
+            alt=""
+            className="cat_ic_1"
+          />
 
           <span className="sp_cat">Каталог товаров</span>
-          <img src="icon\arrow-down-black.png" alt="" className="cat_ic_2" />
+          <img src="/icon/arrow-down-black.png" alt="" className="cat_ic_2" />
           <ul className="sub_menu">
             {/* {categoryContext &&
               categoryContext.map((item) => (
@@ -261,7 +265,7 @@ export const Header = observer(() => {
             >
               <img
                 className="img_gog"
-                src="icon\142-1425732_google-web-search-icon-search-icon-png-white.png"
+                src="/icon/142-1425732_google-web-search-icon-search-icon-png-white.png"
                 alt=""
               />
             </button>
