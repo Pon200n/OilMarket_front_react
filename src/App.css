@@ -25,7 +25,7 @@
   font-size: 30px;
   border-radius: 7px;
   border:none;
-  background-color:rgb(218, 218, 37);
+  background-color:#ffcb05;
 }
 .filterPanelMainPage{
   /* background-color: #bbbbad; */
@@ -107,7 +107,7 @@
 }
 
 .btn_top:hover {
-  background-color: rgb(218, 218, 37);
+  background-color: #ffcb05;
   color: #0d2d3d;
   border-radius: 15px;
   transition: all 0.3s ease;
@@ -240,7 +240,7 @@
 }
 
 .btn_1:hover {
-  background-color: rgb(218, 218, 37);
+  background-color: #ffcb05;
   color: #0d2d3d;
 }
 
@@ -269,7 +269,7 @@
   margin: 3.5px 0px 3px 3px;
   width: 60px;
   height: 60px;
-  background-color: rgb(218, 218, 37);
+  background-color: #ffcb05;
   border-radius: 15px;
   /* text-align: center; */
   /* vertical-align: middle; */
@@ -370,7 +370,7 @@
   align-items: center;
   text-transform: uppercase;
   color: #0d2d3d;
-  background-color: rgb(218, 218, 37);
+  background-color: #ffcb05;
   margin-right: 30px;
 }
 
@@ -413,12 +413,12 @@
 
 .sub_m_it:link {
   color: #0d2d3d;
-  background-color: rgb(218, 218, 37);
+  background-color: #ffcb05;
 }
 
 .sub_m_it:visited {
   color: #0d2d3d;
-  background-color: rgb(218, 218, 37)
+  background-color: #ffcb05
 }
 
 .sub_m_it:hover {
@@ -441,7 +441,7 @@
   max-width: 50vw;
   z-index: 20;
   list-style-type: none;
-  background-color:  rgb(218, 218, 37);
+  background-color:  #ffcb05;
 
 }
 
@@ -503,7 +503,7 @@
 }
 
 .s_sub_m_it2:hover {
-  background-color: rgb(218, 218, 37);
+  background-color: #ffcb05;
   color: #0d2d3d;
   border-radius: 10%;
   opacity: 0.7;
@@ -520,7 +520,7 @@
 }
 
 .s_sub_m_it:hover {
-  background-color: rgb(218, 218, 37);
+  background-color: #ffcb05;
   color: #0d2d3d;
   border-radius: 10%;
   
@@ -607,7 +607,7 @@
 }
 
 .btn_bot:hover {
-  background-color: rgb(218, 218, 37);
+  background-color: #ffcb05;
   color: #0d2d3d;
   height: 50px;
   transition: all 0.5s ease;
@@ -894,12 +894,12 @@ footer {
   text-decoration: none;
 }
 .fot_fst_li:link {
-  color:  rgb(218, 218, 37);
+  color:  #ffcb05;
 
 }
 
 .fot_fst_li:visited {
-  color:  rgb(218, 218, 37);
+  color:  #ffcb05;
 
 }
 .fot_fst_li:hover {
@@ -922,7 +922,7 @@ footer {
 }
 .fot_all_li:hover {
   
-  color: rgb(218, 218, 37);
+  color: #ffcb05;
   
 }
 .quest {
@@ -931,18 +931,18 @@ footer {
 }
 .but_qes {
   padding: 10px 20px;
-  background-color: rgb(218, 218, 37);
+  background-color: #ffcb05;
   text-decoration: none;
 }
 .but_qes:link {
   color: #0d2d3d;
-  background-color: rgb(218, 218, 37);
+  background-color: #ffcb05;
 
 }
 
 .but_qes:visited {
   color: #0d2d3d;
-  background-color: rgb(218, 218, 37);
+  background-color: #ffcb05;
 
 }
 .but_qes:hover {
@@ -1043,7 +1043,7 @@ footer {
 .button_card {
   border: 0;
   border-radius: 0;
-  background-color: rgb(218, 218, 37);
+  background-color: #ffcb05;
   padding: 5px 30px;
   width: 100%;
   text-transform: uppercase;
@@ -1061,7 +1061,7 @@ footer {
 }
 .bay_oneclick_card {
   text-decoration: none;
-  border: 1px solid rgb(218, 218, 37);
+  border: 1px solid #ffcb05;
   padding: 2px 5px;
   border-radius: 15px;
   }
