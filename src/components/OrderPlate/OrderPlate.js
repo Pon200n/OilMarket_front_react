@@ -26,7 +26,6 @@ export function OrderPlate(props) {
   return (
     <>
       <div className="ord_wrap">
-        <button onClick={() => console.log(props.order)}>ord log</button>
         <div className="ord">
           Заказ от:
           {formattedDate}

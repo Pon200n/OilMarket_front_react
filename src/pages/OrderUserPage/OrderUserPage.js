@@ -10,9 +10,6 @@ const OrderUserPage = observer(() => {
 
   return (
     <div className="content_wrapper">
-      <button onClick={() => console.log(order.user_basket_products)}>
-        order log
-      </button>
       <h2 className="head">История заказов</h2>
 
       {user.orders.length > 0 &&

@@ -6,17 +6,24 @@ import { addProductToBasket } from "../http/orderAPI";
 import { mobxContext } from "..";
 
 const Card = observer((props) => {
+  const { user } = useContext(mobxContext);
   const { order } = useContext(mobxContext);
   const priceForm = new Intl.NumberFormat();
 
   async function addProductToBasketLara() {
-    await addProductToBasket(props.item.id, props.item.price).then(
-      (response) => {
-        console.log("basket response", response);
-        order.setUserBasketProducts(response.data.basket.basket_products);
-        // console.log("mobx order store get", order.user_basket_products);
-      }
-    );
+    if (user.isAuth) {
+      await addProductToBasket(props.item.id, props.item.price).then(
+        (response) => {
+          console.log("basket response", response);
+          order.setUserBasketProducts(response.data.basket.basket_products);
+          // console.log("mobx order store get", order.user_basket_products);
+        }
+      );
+    } else {
+      alert(
+        "Пользоваться корзиной и избранным могут авторизованные пользователи, пожалуйста зарегистрируйтесь и войдите в аккаунт."
+      );
+    }
   }
 
   return (
