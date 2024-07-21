@@ -139,14 +139,16 @@ export const Main = observer(() => {
         Главная
       </h2>
       <div id="main_wrapper">
-        <div className="grid_container12">
-          {product?.products?.length > 0 ? (
-            product?.products?.map((product) => (
-              <CardProductGrid key={product.id} item={product} />
-            ))
-          ) : (
-            <h3>Товаров с такими характеристиками не найдено</h3>
-          )}
+        <div className="main_wwwrap">
+          <div className="grid_container12">
+            {product?.products?.length > 0 ? (
+              product?.products?.map((product) => (
+                <CardProductGrid key={product.id} item={product} />
+              ))
+            ) : (
+              <h3>Товаров с такими характеристиками не найдено</h3>
+            )}
+          </div>
         </div>
       </div>
       <br />
