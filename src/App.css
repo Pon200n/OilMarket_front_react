@@ -275,8 +275,10 @@
   /* vertical-align: middle; */
   font-size: 20px;
   font-weight: 700;
+  /* font-family: "Roboto", sans-serif; */
+  /* font-style:italic; */
   color: #0d2d3d;
-  font-family: cursive;
+  /* font-family: cursive; */
   /* position: absolute; */
 
 
@@ -290,11 +292,13 @@
   font-size: 20px;
   font-weight: 700;
   color: white;
-  font-family:  cursive;
-  font-style:italic;
+  /* font-family:  cursive; */
+  /* font-family: "Roboto", sans-serif; */
+  /* font-style:italic; */
   text-decoration: none;
   min-width: 150px;
   min-height: 70px;
+
   /* position: absolute; */
   /* left: 70px;
   top: 20px; */

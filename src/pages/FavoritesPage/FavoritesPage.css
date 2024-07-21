@@ -2,6 +2,7 @@
     display: flex;
     justify-content: center;
     color: rgb(99, 99, 99);
-    font-family: cursive;
+    /* font-family: cursive; */
+    font-family: "Roboto", sans-serif;
     /* font-style: italic; */
 }
