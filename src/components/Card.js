@@ -11,6 +11,7 @@ const Card = observer((props) => {
   const priceForm = new Intl.NumberFormat();
 
   async function addProductToBasketLara() {
+    console.log(user.isAuth);
     if (user.isAuth) {
       await addProductToBasket(props.item.id, props.item.price).then(
         (response) => {
@@ -73,6 +74,7 @@ const Card = observer((props) => {
           <div className="price">{priceForm.format(props.item.price)} ₽</div>
           <div className="but_bask">
             <button onClick={addProductToBasketLara}>В корзину</button>
+            <button onClick={() => console.log("log")}>В log</button>
           </div>
           {/* <div className="bay">
           <a href="" className="bay_oneclick">
